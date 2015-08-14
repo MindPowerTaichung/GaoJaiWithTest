@@ -1,0 +1,589 @@
+﻿<script>
+    //類別
+    var cat_apiUrl = "api/catFactories";
+    var cat_dataSource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: cat_apiUrl,
+                dataType: "json"
+            }
+        },
+        error: function (err) {
+            var message = (err.xhr.responseText == "") ? "" : JSON.parse(err.xhr.responseText).message + "\n";
+            alert(err.status + "\n" + message + "將重新載入資料!");
+            console.log(err.status + "\n" + message + "將重新載入資料!");
+        },
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    no: { editable: true },
+                    name: { editable: true },
+                    timestampString: { editable: false }
+                }
+            }
+        }
+    });
+    //收付款條件
+    var pay_apiUrl = "api/catPays";
+    var pay_dataSource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: pay_apiUrl,
+                dataType: "json"
+            }
+        },
+        error: function (err) {
+            var message = (err.xhr.responseText == "") ? "" : JSON.parse(err.xhr.responseText).message + "\n";
+            alert(err.status + "\n" + message + "將重新載入資料!");
+            console.log(err.status + "\n" + message + "將重新載入資料!");
+        },
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    no: { editable: true },
+                    name: { editable: true },
+                    timestampString: { editable: false }
+                }
+            }
+        }
+    });
+    //幣別
+    var currency_apiUrl = "api/catCurrencies";
+    var currency_dataSource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: currency_apiUrl,
+                dataType: "json"
+            }
+        },
+        error: function (err) {
+            var message = (err.xhr.responseText == "") ? "" : JSON.parse(err.xhr.responseText).message + "\n";
+            alert(err.status + "\n" + message + "將重新載入資料!");
+            console.log(err.status + "\n" + message + "將重新載入資料!");
+        },
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    no: { editable: true },
+                    name: { editable: true },
+                    timestampString: { editable: false }
+                }
+            }
+        }
+    });
+    //分類
+    var type_apiUrl = "api/typeFactories";
+    var type_dataSource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: type_apiUrl,
+                dataType: "json"
+            }
+        },
+        error: function (err) {
+            var message = (err.xhr.responseText == "") ? "" : JSON.parse(err.xhr.responseText).message + "\n";
+            alert(err.status + "\n" + message + "將重新載入資料!");
+            console.log(err.status + "\n" + message + "將重新載入資料!");
+        },
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    no: { editable: true },
+                    name: { editable: true },
+                    timestampString: { editable: false }
+                }
+            }
+        }
+    });
+</script>
+<div id="gridFactories"></div>
+<style type="text/css">
+    .k-edit-form-container {
+        width: 900px;
+        margin-left: 10px;
+    }
+
+    .k-edit-form-container .k-edit-label {
+        width: 150px;
+        vertical-align:bottom;
+        font-size:medium;
+    }
+    .k-edit-form-container .k-textbox {
+    width: 250px;
+    }
+</style>
+<script id="popup-editor" type="text/x-kendo-template">
+    <table id="teamEditor">
+        <tr>
+            <td valign="baseline">
+                <div class="k-edit-label">
+                    <label for="cat">類別：</label>
+                </div>
+            </td>
+            <td><input data-role="dropdownlist" data-source="cat_dataSource" data-text-field="name" data-value-field="id" name="cat" style="width: 90px;" data-bind="value:cat" /></td>
+            <td>
+                <div class="k-edit-label">
+                    <label for="type">分類：</label>
+                </div>
+            </td>
+            <td>
+                <input data-role="dropdownlist" data-source="type_dataSource" data-text-field="name" data-value-field="id" name="type" style="width: 150px;" data-bind="value:type" />
+                <!--<input type="text" id="type" class="k-input k-textbox" data-bind="value:type" />-->
+                <input id="id" name="id" style="display: none;" data-bind="value:id" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="k-edit-label">
+                    <label for="no">編號：</label>
+                </div>
+            </td>
+            <td><input type="text" id="no" class="k-input k-textbox" data-bind="value:no" name="no" required /></td>
+            <td>
+                <div class="k-edit-label">
+                    <label for="name">名稱：</label>
+                </div>
+            </td>
+            <td><input type="text" id="name" class="k-input k-textbox" data-bind="value:name" name="name" required /></td>
+        </tr>
+        <tr>
+            <td>
+                <div class="k-edit-label">
+                    <label for="sname">簡稱：</label>
+                </div>
+            </td>
+            <td><input type="text" id="sname" class="k-input k-textbox" data-bind="value:sname" name="sname" required /></td>
+            <td>
+                <div class="k-edit-label">
+                    <label for="unid">統一編號：</label>
+                </div>
+            </td>
+            <td><input type="text" id="unid" class="k-input k-textbox" data-bind="value:unid" /></td>
+        </tr>
+        <tr>
+            <td>
+                <div class="k-edit-label">
+                    <label for="telephone1">公司電話：</label>
+                </div>
+            </td>
+            <td><input type="text" id="telephone1" class="k-input k-textbox" data-bind="value:telephone1" /></td>
+            <td>
+                <div class="k-edit-label">
+                    <label for="fax">公司Fax：</label>
+                </div>
+            </td>
+            <td><input type="text" id="fax" class="k-input k-textbox" data-bind="value:fax" /></td>
+        </tr>
+        <tr>
+            <td>
+                <div class="k-edit-label">
+                    <label for="email1">公司Email：</label>
+                </div>
+            </td>
+            <td><input type="text" id="email1" class="k-input k-textbox" data-bind="value:email1" /></td>
+            <td>
+                <div class="k-edit-label">
+                    <label for="website">公司網站：</label>
+                </div>
+            </td>
+            <td><input type="text" id="website" class="k-input k-textbox" data-bind="value:website" /></td>
+        </tr>
+        <tr>
+            <td>
+                <div class="k-edit-label">
+                    <label for="address">公司地址：</label>
+                </div>
+            </td>
+            <td><input type="text" id="address" class="k-input k-textbox" data-bind="value:address" /></td>
+            <td>
+                <div class="k-edit-label">
+                    <label for="shipaddr">送貨地址：</label>
+                </div>
+            </td>
+            <td><input type="text" id="shipaddr" class="k-input k-textbox" data-bind="value:shipaddr" /></td>
+        </tr>
+        <tr>
+            <td>
+                <div class="k-edit-label">
+                    <label for="invoiceaddr">發票地址：</label>
+                </div>
+            </td>
+            <td><input type="text" id="invoiceaddr" class="k-input k-textbox" data-bind="value:invoiceaddr" /></td>
+            <td>
+                <div class="k-edit-label">
+                    <label for="contact1">負責人：</label>
+                </div>
+            </td>
+            <td><input type="text" id="contact1" class="k-input k-textbox" data-bind="value:contact1" name="contact1" required /></td>
+        </tr>
+        <tr>
+            <td>
+                <div class="k-edit-label">
+                    <label for="telephone2">負責人電話：</label>
+                </div>
+            </td>
+            <td><input type="text" id="telephone2" class="k-input k-textbox" data-bind="value:telephone2" /></td>
+            <td>
+                <div class="k-edit-label">
+                    <label for="email2">負責人Email：</label>
+                </div>
+            </td>
+            <td><input type="text" id="email2" class="k-input k-textbox" data-bind="value:email2" /></td>
+        </tr>
+        <tr>
+            <td>
+                <div class="k-edit-label">
+                    <label for="contact2">聯絡人：</label>
+                </div>
+            </td>
+            <td><input type="text" id="contact2" class="k-input k-textbox" data-bind="value:contact2" /></td>
+            <td>
+                <div class="k-edit-label">
+                    <label for="telephone3">聯絡人電話：</label>
+                </div>
+            </td>
+            <td><input type="text" id="telephone3" class="k-input k-textbox" data-bind="value:telephone3" /></td>
+        </tr>
+        <tr>
+            <td>
+                <div class="k-edit-label">
+                    <label for="pay">付款條件：</label>
+                </div>
+            </td>
+            <td><input data-role="dropdownlist" data-source="pay_dataSource" data-text-field="name" data-value-field="id" name="pay" style="width: 150px;" data-bind="value:pay" /></td>
+            <td>
+                <div class="k-edit-label">
+                    <label for="currency">交易幣別：</label>
+                </div>
+            </td>
+            <td><input data-role="dropdownlist" data-source="currency_dataSource" data-text-field="name" data-value-field="id" name="currency" style="width: 100px;" data-bind="value:currency" /></td>
+        </tr>
+        <tr>
+            <td>
+                <div class="k-edit-label">
+                    <label for="note">備註：</label>
+                </div>
+            </td>
+            <td colspan="3"><textarea name="note" cols="60" rows="5"></textarea></td>
+        </tr>
+    </table>
+</script>
+<script type="text/x-kendo-template" id="detailtemplate">
+    <table class="k-grid table">
+        <tr>
+            <td class="tdTitle01" style="width:70px" align="center">
+                類別
+            </td>
+            <td class="tdContent01">
+                #= (catName == null) ? '' : catName #
+            </td>
+            <td class="tdTitle01" style="width:70px" align="center">
+                分類
+            </td>
+            <td class="tdContent01">
+                #= (typeName == null) ? '' : typeName #
+            </td>
+            <td class="tdTitle01" style="width:70px" align="center">
+                廠商編號
+            </td>
+            <td class="tdContent01">
+                #= (no == null) ? '' : no #
+            </td>
+            <td class="tdTitle01" style="width:100px" align="center">
+                最後交易日
+            </td>
+            <td class="tdContent01">
+                #= (lasttrade == null) ? '' : kendo.toString(kendo.parseDate(lasttrade), 'yyyy-MM-dd') #
+            </td>
+        </tr>
+        <tr>
+            <td class="tdTitle01" style="width:70px" align="center">
+                公司名稱
+            </td>
+            <td class="tdContent02">
+                #= (name == null) ? '' : name #
+            </td>
+            <td class="tdTitle01" style="width:70px" align="center">
+                簡稱
+            </td>
+            <td class="tdContent02">
+                #= (sname == null) ? '' : sname #
+            </td>
+            <td class="tdTitle01" style="width:70px" align="center">
+                統一編號
+            </td>
+            <td class="tdContent02">
+                #= (unid == null) ? '' : unid #
+            </td>
+            <td class="tdTitle01" style="width:100px" align="center">
+                公司電話
+            </td>
+            <td class="tdContent02">
+                #= (telephone1 == null) ? '' : telephone1 #
+            </td>
+        </tr>
+        <tr>
+            <td class="tdTitle01" style="width:70px" align="center">
+                傳真
+            </td>
+            <td class="tdContent01">
+                #= (fax == null) ? '' : fax #
+            </td>
+            <td class="tdTitle01" style="width:70px" align="center">
+                Email(公)
+            </td>
+            <td class="tdContent01">
+                #= (email1 == null) ? '' : email1 #
+            </td>
+            <td class="tdTitle01" style="width:70px" align="center">
+                網址
+            </td>
+            <td class="tdContent01">
+                #= (website == null) ? '' : website #
+            </td>
+            <td class="tdTitle01" style="width:100px" align="center">
+                付款條件
+            </td>
+            <td class="tdContent01">
+                #= (payName == null) ? '' : payName #
+            </td>
+        </tr>
+        <tr>
+            <td class="tdTitle01" style="width:70px" align="center">
+                負責人
+            </td>
+            <td class="tdContent02">
+                #= (contact1 == null) ? '' : contact1 #
+            </td>
+            <td class="tdTitle01" style="width:70px" align="center">
+                電話
+            </td>
+            <td class="tdContent02">
+                #= (telephone2 == null) ? '' : telephone2 #
+            </td>
+            <td class="tdTitle01" style="width:70px" align="center">
+                Email
+            </td>
+            <td class="tdContent02">
+                #= (email2 == null) ? '' : email2 #
+            </td>
+            <td class="tdTitle01" style="width:100px" align="center">
+                交易幣別
+            </td>
+            <td class="tdContent02">
+                #= (currencyName == null) ? '' : currencyName #
+            </td>
+        </tr>
+        <tr>
+            <td class="tdTitle01" style="width:70px" align="center">
+                聯絡人
+            </td>
+            <td class="tdContent01">
+                #= (contact2 == null) ? '' : contact2 #
+            </td>
+            <td class="tdTitle01" style="width:70px" align="center">
+                電話
+            </td>
+            <td class="tdContent01">
+                #= (telephone3 == null) ? '' : telephone3 #
+            </td>
+            <td class="tdTitle01" style="width:70px" align="center">
+                Email
+            </td>
+            <td class="tdContent01">
+                #= (email3 == null) ? '' : email3 #
+            </td>
+            <td class="tdTitle01" style="width:100px" align="center"></td>
+            <td class="tdContent01"></td>
+        </tr>
+        <tr>
+            <td class="tdTitle01" style="width:70px" align="center">
+                公司地址
+            </td>
+            <td class="tdContent02" colspan="3">
+                #= (address == null) ? '' : address #
+            </td>
+            <td class="tdTitle01" style="width:70px" align="center">
+                送貨地址
+            </td>
+            <td class="tdContent02" colspan="3">
+                #= (shipaddr == null) ? '' : shipaddr #
+            </td>
+        </tr>
+        <tr>
+            <td class="tdTitle01" style="width:70px" align="center">
+                帳單地址
+            </td>
+            <td class="tdContent01" colspan="3">
+                #= (invoiceaddr == null) ? '' : invoiceaddr #
+            </td>
+            <td class="tdTitle01" style="width:70px" align="center">
+                備註
+            </td>
+            <td class="tdContent01" colspan="3">
+                #= (note == null) ? '' : note #
+            </td>
+        </tr>
+    </table>
+</script>
+<script>
+    var factories_apiUrl = "api/factories";
+    var factories_dataSource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: factories_apiUrl,
+                dataType: "json"
+            },
+            update: {
+                url: function (data) {
+                    return factories_apiUrl + "/" + data.id;
+                },
+                type: "put",
+                contentType: "application/json",
+                dataType: "json"
+            },
+            destroy: {
+                url: function (data) {
+                    return factories_apiUrl + "/" + data.id;
+                },
+                type: "delete",
+                dataType: "json"
+            },
+            create: {
+                url: factories_apiUrl,
+                type: "post",
+                contentType: "application/json",
+                dataType: "json"
+            },
+            parameterMap: function (data, operation) {
+                if (operation == "create") {
+                    data.id = 0;
+                }
+                return JSON.stringify(data);
+            }
+        },
+        batch: false,
+        pageSize: 10,
+        error: function (err) {
+            var message = (err.xhr.responseText == "") ? "" : JSON.parse(err.xhr.responseText).message + "\n";
+            alert(err.status + "\n" + message + "將重新載入資料!");
+            console.log(err.status + "\n" + message + "將重新載入資料!");
+            $('#gridFactories').data('kendoGrid').dataSource.read();
+            $('#gridFactories').data('kendoGrid').refresh();
+        },
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    id: { editable: false, nullable: false },
+                    catName: { nullable: true },
+                    cat: { editable: true },
+                    type: { editable: true },
+                    typeName: { nullable: true },
+                    no: { editable: true, validation: { required: true } },
+                    name: { editable: true, validation: { required: true } },
+                    sname: { editable: true, validation: { required: true } },
+                    unid: { editable: true },
+                    contact1: { editable: true, validation: { required: true } },
+                    contact2: { editable: true },
+                    email1: { editable: true },
+                    email2: { editable: true },
+                    email3: { editable: true },
+                    telephone1: { editable: true },
+                    telephone2: { editable: true },
+                    telephone3: { editable: true },
+                    website: { editable: true },
+                    fax: { editable: true },
+                    address: { editable: true },
+                    shipaddr: { editable: true },
+                    Invoiceaddr: { editable: true },
+                    pay: { editable: true },
+                    website: { editable: true },
+                    fax: { editable: true },
+                    address: { editable: true },
+                    shipaddr: { editable: true },
+                    Invoiceaddr: { editable: true },
+                    payName: { nullable: true },
+                    currency: { editable: true },
+                    currencyName: { nullable: true },
+                    lasttrade: { editable: true },
+                    Note: { editable: true },
+                    timestampString: { editable: false }
+                }
+            }
+        }
+    });
+
+    $("#gridFactories").kendoGrid({
+        dataSource: factories_dataSource,
+        detailTemplate: kendo.template($("#detailtemplate").html()),
+        pageable: true,
+        sortable: true,
+        filterable:
+            {
+                extra: false,
+                operators: {
+                    string: {
+                        Contains: "包含"
+                    }
+                }
+            },
+        toolbar: ["create"],
+        columns: [
+            { field: "id", hidden: true },
+            { field: "catName", title: "類別", width: "80px" },
+            { field: "typeName", title: "分類", width: "150px" },
+            { field: "no", title: "編號", width: "100px" },
+            { field: "name", title: "名稱" },
+            { field: "contact2", title: "聯絡人", width: "100px" },
+            { field: "sname", title: "簡稱", hidden: true },
+            { field: "unid", title: "統一編號", hidden: true },
+            { field: "telephone3", title: "聯絡人電話", width: "150px" },
+            { field: "telephone1", title: "公司電話", width: "150px" },
+            { field: "fax", title: "公司Fax", hidden: true },
+            { field: "email1", title: "公司Email", hidden: true },
+            { field: "website", title: "公司網站", hidden: true },
+            { field: "Address", title: "公司地址", hidden: true },
+            { field: "Shipaddr", title: "送貨地址", hidden: true },
+            { field: "Invoiceaddr", title: "發票地址", hidden: true },
+            { field: "contact1", title: "負責人", hidden: true },
+            { field: "telephone2", title: "負責人電話", hidden: true },
+            { field: "email2", title: "負責人Email", hidden: true },
+            { field: "pay", title: "付款條件", hidden: true },
+            { field: "currency", title: "交易幣別", hidden: true },
+            { field: "note", title: "備註", hidden: true },
+            { command: ["edit", "destroy"], title: "&nbsp;" }
+        ],
+        editable: {
+            mode: "popup",
+            window: {
+                title: "內容"
+            },
+            template: kendo.template($("#popup-editor").html()),
+
+            confirmation: "確定刪除?"
+        },
+        edit: function (e) {
+            if (e.model.isNew()) {
+                var cat = $("input[name=cat]").data("kendoDropDownList");
+                //cat.value(1);
+                e.model.set("cat", 1);
+                var type = $("input[name=type]").data("kendoDropDownList");
+                //type.value(1);
+                e.model.set("type", 1);
+                var pay = $("input[name=pay]").data("kendoDropDownList");
+                //pay.value(1);
+                e.model.set("pay", 1);
+                var currency = $("input[name=currency]").data("kendoDropDownList");
+                //currency.value(1);
+                e.model.set("currency", 1);
+
+            }
+        },
+    });
+
+</script>

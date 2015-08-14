@@ -1,0 +1,95 @@
+﻿<div id="gridCatPays"></div>
+
+<script>
+    var catPaysView_apiUrl = "api/catPays";
+    var catFactoriesView_dataSource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: catPaysView_apiUrl,
+                dataType: "json",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + Cookies.get('token'));
+                }
+            },
+            update: {
+                url: function (data) {
+                    return catPaysView_apiUrl + "/" + data.id;
+                },
+                type: "put",
+                contentType: "application/json",
+                dataType: "json",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + Cookies.get('token'));
+                }
+            },
+            destroy: {
+                url: function (data) {
+                    return catPaysView_apiUrl + "/" + data.id;
+                },
+                type: "delete",
+                dataType: "json",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + Cookies.get('token'));
+                }
+            },
+            create: {
+                url: catPaysView_apiUrl,
+                type: "post",
+                contentType: "application/json",
+                dataType: "json",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + Cookies.get('token'));
+                }
+            },
+            parameterMap: function (data, operation) {
+                if (operation == "create") {
+                    data.id = 0;
+                }
+                return JSON.stringify(data);
+            }
+        },
+        error: function (err) {
+            if (err.xhr.status == "401") {
+                window.location.href = "../Login.html";
+            } else if (err.xhr.status == "409") {
+                var message = (err.xhr.responseText == "") ? "" : JSON.parse(err.xhr.responseText).message + "\n";
+
+                //alert(err.xhr.status + "\n" + message + "將重新載入資料!");                    
+                notification.show({
+                    title: "資料衝突",
+                    message: message
+                }, "error");
+
+                $('#gridCatPays').data('kendoGrid').dataSource.read();
+                $('#gridCatPays').data('kendoGrid').refresh();
+            } else {
+                throw err;
+            }
+        },
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    id: { editable: false, nullable: false },
+                    no: { nullable: false, validation: { required: true } },
+                    name: { validation: { required: true } },
+                    timestampString: { editable: false }
+                }
+            }
+        }
+    });
+
+    $("#gridCatPays").kendoGrid({
+        dataSource: catFactoriesView_dataSource,
+        toolbar: ["create"],
+        sortable:true,
+        columns: [
+            { field: "no", title: "分類編號", width: "120px", filterable: false },
+            { field: "name", title: "分類名稱", width: "120px", filterable: false },
+            { command: ["edit", "destroy"], title: "&nbsp;", width: "250px", filterable: false }
+        ],
+        editable: "inline",
+        filterable: true
+    });
+
+</script>

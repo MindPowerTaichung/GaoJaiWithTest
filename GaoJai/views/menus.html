@@ -1,0 +1,196 @@
+﻿<h1 class="page-header">功能選單</h1>
+
+Text: <input id="NodeText" class="k-textbox" /><br />
+ContentUrl: <input id="NodeContentUrl" class="k-textbox" /><br />
+CssClass: <input id="NodeCssClass" class="k-textbox" /><br />
+<input id="NodeId" type="hidden" />
+<input id="NodeParentId" type="hidden" />
+<input id="NodeTimestampString" type="hidden" />
+<button class="k-button" onclick="updateNode();">更新</button>
+<button class="k-button" onclick="addNode();">新增</button>
+<button class="k-button" onclick="removeNode();">刪除</button>
+<div id="menusTreeview"></div>
+
+<script>
+
+var menus_apiUrl = "api/Menus";
+var menusJSON_apiUrl = "api/Menus/Json/Role/0";
+var menus_HdataSource = new kendo.data.HierarchicalDataSource({
+    transport: {
+        read: {
+            url: menusJSON_apiUrl,
+            dataType: "json",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'Basic ' + Cookies.get('token'));
+            }
+        }
+    },
+    schema: {
+        model: {
+            id: "id",
+            hasChildren: "hasChildren",
+            children: "subMenus"
+        }
+    }
+});
+
+$("#menusTreeview").kendoTreeView({
+    dataSource: menus_HdataSource,
+    dataTextField: "text",
+    dragAndDrop: true,
+    dataBound: function () {
+        this.expand(".k-item");
+    },
+    change: function () {
+        var tv = $('#menusTreeview').data('kendoTreeView'),
+                    selected = tv.select(),
+                    item = tv.dataItem(selected);
+        //var selectedDataItem = getDataItem(this.select());
+        getMenuToEdit(item.id);
+    },
+    drop: function (e) {
+        var source = getDataItem(e.sourceNode);
+        var destination = getDataItem(e.destinationNode);;
+
+        //console.log(source.id + " -> " + destination.id);
+        //console.log(source.text + " -> " + destination.text);
+        //debugger;
+        source.parentId = destination.id;
+        $.ajax({
+            type: "PUT",
+            url: menus_apiUrl + "/" + source.id,
+            data: JSON.stringify(source),
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'Basic ' + Cookies.get('token'));
+            },
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data, status, jqXHR) {
+                //alert("PUT success..." + data);
+            },
+            error: function (xhr) {
+                alert(xhr.responseText);
+            }
+        });
+
+    }
+});
+
+function getDataItem(treeNode) {
+    var menusTreeview = $("#menusTreeview").data("kendoTreeView");
+    var uid = $(treeNode).data("uid");
+    return menusTreeview.dataSource.getByUid(uid);
+}
+
+function getMenuToEdit(id) {
+    $.ajax({
+        type: "GET",
+        url: menus_apiUrl + "/" + id,
+        dataType: "json",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Basic ' + Cookies.get('token'));
+        },
+        success: function (data, status, jqXHR) {
+            $("#NodeId").val(data.id);
+            $("#NodeText").val(data.text);
+            $("#NodeContentUrl").val(data.contentUrl);
+            $("#NodeCssClass").val(data.cssClass);
+            $("#NodeParentId").val(data.parentId);
+            $("#NodeTimestampString").val(data.timestampString);
+        },
+        error: function (xhr) {
+            alert(xhr.responseText);
+        }
+    });
+}
+
+function addNode() {
+    var menusTreeview = $("#menusTreeview").data("kendoTreeView");
+    var selectedNode = menusTreeview.select().length == 0 ? null : menusTreeview.select();
+    var parentId = selectedNode == null ? 0 : getDataItem(menusTreeview.select()).id;
+
+    var newNode = {
+        "id": 0,
+        "text": $("#NodeText").val(),
+        "parentId": parentId,
+        "hasChildren": false,
+        "contentUrl": $("#NodeContentUrl").val(),
+        "cssClass": $("#NodeCssClass").val()
+    };
+
+    $.ajax({
+        type: "POST",
+        url: menus_apiUrl,
+        data: JSON.stringify(newNode),
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Basic ' + Cookies.get('token'));
+        },
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data, status, jqXHR) {
+            //alert("success..." + data);
+            debugger;
+            newNode.id = data.id;
+            menusTreeview.append(newNode, selectedNode); //selectedNode = null則加到root group
+        },
+        error: function (xhr) {
+            alert(xhr.responseText);
+        }
+    });
+}
+
+function removeNode() {
+    var menusTreeview = $("#menusTreeview").data("kendoTreeView");
+    var selectedNode = menusTreeview.select().length == 0 ? null : menusTreeview.select();
+
+    if (selectedNode == null)
+        return;
+
+    var selectedDataItem = getDataItem(menusTreeview.select());
+    $.ajax({
+        type: "DELETE",
+        url: menus_apiUrl + "/" + selectedDataItem.id,
+        dataType: "json",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Basic ' + Cookies.get('token'));
+        },
+        success: function (data) {
+            //alert("successs.... " + data);
+            menusTreeview.remove(selectedNode);
+        },
+        error: function (xhr) {
+            alert(xhr.responseText);
+        }
+    });
+
+}
+
+function updateNode() {
+    var data = {
+        "id": $("#NodeId").val(),
+        "text": $("#NodeText").val(),
+        "contentUrl": $("#NodeContentUrl").val(),
+        "cssClass": $("#NodeCssClass").val(),
+        "parentId": $("#NodeParentId").val(),
+        "timestampString": $("#NodeTimestampString").val()
+    };
+
+    $.ajax({
+        type: "PUT",
+        url: menus_apiUrl + "/" + data.id,
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Basic ' + Cookies.get('token'));
+        },
+        success: function (data, status, jqXHR) {
+            var menusTreeview = $("#menusTreeview").data("kendoTreeView");
+            menusTreeview.dataSource.read();
+        },
+        error: function (xhr) {
+            alert(xhr.responseText);
+        }
+    });
+}
+</script>

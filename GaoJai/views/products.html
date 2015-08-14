@@ -1,0 +1,110 @@
+﻿<h1 class="page-header">產品</h1>
+<div id="gridProducts"></div>
+
+<script>
+    var productsView_dsCategories = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: "api/categories",
+                dataType: "json",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + Cookies.get('token'));
+                }
+            }
+        }
+    });
+    productsView_dsCategories.read();    
+
+    var productsView_apiUrl = "api/products";
+    var productsView_dataSource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: productsView_apiUrl,
+                dataType: "json"
+            },
+            update: {
+                url: function (data) {
+                    return productsView_apiUrl + "/" + data.id;
+                },
+                type: "put",
+                contentType: "application/json",
+                dataType: "json"
+            },
+            destroy: {
+                url: function (data) {
+                    return productsView_apiUrl + "/" + data.id;
+                },
+                type: "delete",
+                dataType: "json"
+            },
+            create: {
+                url: productsView_apiUrl,
+                type: "post",
+                contentType: "application/json",
+                dataType: "json"
+            },
+            parameterMap: function (data, operation) {
+                if (operation == "create") {
+                    data.id = 0;
+                }
+                return JSON.stringify(data);
+            }
+        },
+        error: function (err) {
+            var message = (err.xhr.responseText == "") ? "" : JSON.parse(err.xhr.responseText).message + "\n";
+            alert(err.status + "\n" + message + "將重新載入資料!");
+            $('#gridProducts').data('kendoGrid').dataSource.read();
+            $('#gridProducts').data('kendoGrid').refresh();
+        },
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    id: { editable: false, nullable: false },
+                    name: { validation: { required: true } },
+                    price: { type: "number" },
+                    category_Id: { defaultValue: 1 },
+                    timestampString: { editable: false }
+                }
+            }
+        }
+    });
+
+    $("#gridProducts").kendoGrid({
+        dataSource: productsView_dataSource,
+        height: 550,
+        toolbar: ["create"],
+        columns: [
+            { field: "id", title: "產品編號", width: "120px" },
+            { field: "name", title: "產品名稱", width: "120px" },
+            { field: "price", title: "價格", width: "120px" },
+            {
+                field: "category_Id", title: "分類編號", width: "120px",
+                editor: categoryDropDownEditor,
+                template: "#=categoryName(category_Id)#"
+            },
+            { command: ["edit", "destroy"], title: "&nbsp;", width: "250px" }
+        ],
+        editable: "inline"
+    });
+
+    function categoryDropDownEditor(container, options) {
+        var input = $('<input name="category_Id" />')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "name",
+                dataValueField: "id",
+                dataSource: productsView_dsCategories
+            });
+
+    }
+
+    function categoryName(category_Id) {
+        var categories = productsView_dsCategories.data();
+        for (var i = 0; i < categories.length; i++) {
+            if (categories[i].id == category_Id) {
+                return categories[i].name;
+            }
+        }
+    }
+</script>

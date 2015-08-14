@@ -1,0 +1,122 @@
+﻿<h1 class="page-header">使用者管理</h1>
+<div id="usersView_gridUsers"></div>
+
+<script>
+    debugger;
+    var usersView_apiUrl = "Membership/Users";
+    var usersView_dataSource = new kendo.MPAuthorization.DataSource({
+        transport: {
+            read: {
+                url: usersView_apiUrl + "/UserInfo",
+                dataType: "json"
+            },
+            update: {
+                url: function (data) {
+                    return usersView_apiUrl + "/UserInfo/" + data.userName;
+                },
+                type: "put",
+                contentType: "application/json",
+                dataType: "json"
+            },
+            destroy: {
+                url: function (data) {
+                    return usersView_apiUrl + "/" + data.userName;
+                },
+                type: "delete",
+                dataType: "json"
+            },
+            create: {
+                url: usersView_apiUrl,
+                type: "post",
+                contentType: "application/json",
+                dataType: "json",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Basic ' + Cookies.get('token'));
+                }
+            },
+            parameterMap: function (data, operation) {
+                //if (operation == "create") {
+                //    data.id = 0;
+                //}
+                return JSON.stringify(data);
+            }
+        },
+        requestEnd: function(e) {
+            //check the "response" argument to skip the local operations
+            if (e.type === "create" && e.response.userName) {
+                alert(e.response.userName + " 的預設密碼為: " + e.response.userName);
+            }
+        },
+        error: function (err) {
+            if (err.xhr.status == "401") {
+                window.location.href = "../Login.html";
+            } else if (err.xhr.status == "409") {
+                var message = (err.xhr.responseText == "") ? "" : JSON.parse(err.xhr.responseText).message + "\n";
+                $('#usersView_gridUsers').data('kendoGrid').dataSource.read();
+                $('#usersView_gridUsers').data('kendoGrid').refresh();
+            } else {
+                alert(err.responseText);
+            }
+        },
+        schema: {
+            model: {
+                id: "userName",
+                fields: {
+                    userName: { editable: true, nullable: false },
+                    roleId: { editable: true, validation: { required: true }, defaultValue: 7 },
+                    roleName: { editable: false },
+                    timestampString: { editable: false }
+                }
+            }
+        }
+    });
+
+    $("#usersView_gridUsers").kendoGrid({
+        dataSource: usersView_dataSource,
+        height: 550,
+        toolbar: [
+                { name: "create", text: "新增使用者" }
+        ],
+        columns: [
+            { field: "userName", title: "使用者名稱", width: "120px" },
+            { field: "roleId", title: "角色", width: "120px", editor: roleDropDownEditor, template: "#=roleName#" },
+            {
+                command: [
+                                    { name: "edit", text: "修改" },
+                                    { name: "destroy", text: "刪除" },
+                                    {
+                                        text: "變更密碼", click: function (e) {
+                                            e.preventDefault();
+                                            var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                                            showChangePasswordWindow(dataItem.userName);
+                                        }
+                                    }
+                                ],
+                                title: "&nbsp;", width: "250px"
+            }
+        ],
+        editable: "inline"        
+    });
+
+    function roleDropDownEditor(container, options) {
+        var rolesView_apiUrl = "Membership/Roles";
+        $('<input required data-text-field="name" data-value-field="id" data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                autoBind: true,
+                dataSource: {
+                    type: "json",
+                    transport: {
+                        read: {
+                            url: rolesView_apiUrl,
+                            type: 'GET',
+                            beforeSend: function (xhr) {
+                                xhr.setRequestHeader('Authorization', 'Basic ' + Cookies.get('token'));
+                            }
+                        }
+                    }
+                }
+            });
+    }
+
+</script>

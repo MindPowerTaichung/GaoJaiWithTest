@@ -1,0 +1,107 @@
+﻿<h1 class="page-header">使用者功能選單</h1>
+
+<input id="menusOfUserlstUsers" />
+<!--<input id="menusOfUserlstRoles" />-->
+
+<div id="menusOfUserTreeview"></div>
+
+<script>
+
+    var userinfo_apiUrl = "Membership/Users/UserInfo",
+            //roles_apiUrl = "Membership/roles",
+            userMenu_apiUrl = "Membership/UserMenu",
+            menusOfUserJSON_apiUrl = "api/Menus/Json/User";
+
+    $("#menusOfUserlstUsers").kendoDropDownList({
+        dataTextField: "userName",
+        dataValueField: "userName",
+        dataSource: {
+            transport: {
+                read: {
+                    dataType: "json",
+                    url: userinfo_apiUrl,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('Authorization', 'Basic ' + Cookies.get('token'));
+                    }
+                }
+            }
+        },
+        dataBound: function (e) {
+            //選取第一個user
+            this.select(0);
+            this.trigger("change", { item: $("li.k-state-selected", $("#menusOfUserlstUsers-list")) });
+        },
+        change: function (e) {
+            var menusOfUserlstUsers = $("#menusOfUserlstUsers").data("kendoDropDownList");
+            var user = menusOfUserlstUsers.dataItem(e.item);
+
+            //顯示user對應的menu在treeview 
+            menusOfUser_refreshTreeView(user.userName);
+
+        }        
+    });
+
+    $("#menusOfUserTreeview").kendoTreeView({
+        dataSource: {
+            transport: {
+                read: {
+                    url: "",
+                    dataType: "json",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('Authorization', 'Basic ' + Cookies.get('token'));
+                    }
+                }
+            },
+            schema: {
+                model: {
+                    id: "id",
+                    hasChildren: "hasChildren",
+                    children: "subMenus"
+                }
+            }
+        },
+        dataTextField: "text",
+        dragAndDrop: true,
+        checkboxes: {
+            checkChildren: true
+        },
+        dataBound: function () {
+            this.expand(".k-item");
+        },
+        check: function (e) {
+
+            var user = $("#menusOfUserlstUsers").data("kendoDropDownList").dataItem();
+            var menu = $("#menusOfUserTreeview").data("kendoTreeView").dataItem(e.node);
+
+            var userMenu = {
+                "userName": user.userName,
+                "menuId": menu.id
+            };
+
+            var api_type = menu.checked ? "POST" : "DELETE";
+
+            $.ajax({
+                type: api_type,
+                url: userMenu_apiUrl,
+                data: JSON.stringify(userMenu),
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Basic ' + Cookies.get('token'));
+                },
+                contentType: "application/json; charset=utf-8",
+                success: function (data, status, jqXHR) {
+                    menusOfUser_refreshTreeView(user.userName);
+                },
+                error: function (xhr) {
+                    alert(xhr.responseText);
+                }
+            });
+
+        }
+    });
+
+    function menusOfUser_refreshTreeView(userName) {
+        var menusOfUserTreeview = $("#menusOfUserTreeview").data("kendoTreeView");
+        menusOfUserTreeview.dataSource.transport.options.read.url = menusOfUserJSON_apiUrl + "/" + userName;
+        menusOfUserTreeview.dataSource.read();
+    }
+</script>

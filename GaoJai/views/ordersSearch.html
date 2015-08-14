@@ -1,0 +1,107 @@
+﻿<h1 class="page-header">訂單</h1>
+<div id="gridOrders"></div>
+<div id="wndEdit"></div>
+<script>
+    var apiUrl_Orders = "api/orders";
+    var dsCategories = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: apiUrl_Orders,
+                dataType: "json"
+            },
+            update: {
+                url: function (data) {
+                    return apiUrl_Orders + "/" + data.id;
+                },
+                type: "put",
+                contentType: "application/json",
+                dataType: "json"
+            },
+            destroy: {
+                url: function (data) {
+                    return apiUrl_Orders + "/" + data.id;
+                },
+                type: "delete",
+                dataType: "json"
+            },
+            create: {
+                url: apiUrl_Orders,
+                type: "post",
+                contentType: "application/json",
+                dataType: "json"
+            },
+            parameterMap: function (data, operation) {
+                if (operation == "create") {
+                    data.id = 0;
+                }
+                return JSON.stringify(data);
+            }
+        },
+        error: function (err) {
+            var message = (err.xhr.responseText == "") ? "" : JSON.parse(err.xhr.responseText).message + "\n";
+            alert(err.status + "\n" + message + "將重新載入資料!");
+            $('#gridOrders').data('kendoGrid').dataSource.read();
+            $('#gridOrders').data('kendoGrid').refresh();
+        },
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    id: { editable: false, nullable: false },
+                    customer_Id: { validation: { required: true } },
+                    timestampString: { editable: false }
+                }
+            }
+        }
+    });
+
+    function detailInit(e) {
+        $("<div/>").appendTo(e.detailCell).kendoGrid({
+            dataSource: e.data.orderDetails,
+            columns: [
+                { field: "productName", title: "產品名稱", width: "110px" },
+                { field: "quantity", title: "數量" },
+            ]
+        });
+    }
+    function showDetails(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        menuCaption = "訂單明細- " + dataItem.id;
+        menuUrl = "views/ordersDetails.html";
+        global_Order_Id = dataItem.id;
+        menuClick(menuCaption, menuUrl);
+
+        //var wnd = $("#wndEdit").data("kendoWindow");
+        //if (wnd == undefined)
+        //    wnd = $("#wndEdit").kendoWindow({
+        //        width: "615px",
+        //        modal: true,
+        //        title: "訂單明細- " + dataItem.id,
+        //        content: "ordersDetails.html?order_id=" + dataItem.id
+        //    }).data("kendoWindow");
+        //wnd.center().open();
+    }
+
+    $("#gridOrders").kendoGrid({
+        dataSource: dsCategories,
+        height: 550,
+        toolbar: ["create"],
+        detailInit: detailInit,
+        columns: [
+            { field: "id", title: "編號", width: "120px" },
+            { field: "customer_Id", title: "客戶代碼", width: "120px" },
+            {
+                command: [
+                  { text: "編輯", click: showDetails },
+                  "destroy"
+                ],
+                title: "&nbsp;",
+                width: "250px"
+            },
+        ],
+        editable: "inline"
+    });
+
+</script>

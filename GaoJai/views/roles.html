@@ -1,0 +1,84 @@
+﻿<h1 class="page-header">角色管理</h1>
+<div id="rolesView_gridRoles"></div>
+
+<script>
+    var rolesView_apiUrl = "Membership/Roles";
+    var rolesView_dataSource = new kendo.MPAuthorization.DataSource({
+        transport: {
+            read: {
+                url: rolesView_apiUrl ,
+                dataType: "json"
+            },
+            update: {
+                url: function (data) {
+                    return rolesView_apiUrl + "/" + data.id;
+                },
+                type: "put",
+                contentType: "application/json",
+                dataType: "json"
+            },
+            destroy: {
+                url: function (data) {
+                    return rolesView_apiUrl + "/" + data.id;
+                },
+                type: "delete",
+                dataType: "json"
+            },
+            create: {
+                url: rolesView_apiUrl,
+                type: "post",
+                contentType: "application/json",
+                dataType: "json"
+            },
+            parameterMap: function (data, operation) {
+                if (operation == "create") {
+                    data.id = 0;
+                }
+                return JSON.stringify(data);
+            }
+        },
+        error: function (err) {
+            if (err.xhr.status == "401") {
+                window.location.href = "../Login.html";
+            } else if (err.xhr.status == "409") {
+                var message = (err.xhr.responseText == "") ? "" : JSON.parse(err.xhr.responseText).message + "\n";
+
+                $('#rolesView_gridRoles').data('kendoGrid').dataSource.read();
+                $('#rolesView_gridRoles').data('kendoGrid').refresh();
+            } else {
+                alert(err.responseText);
+            }
+        },
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    id: { editable: false },
+                    name: { editable: true, nullable: false },
+                    timestampString: { editable: false }
+                }
+            }
+        }
+    });
+
+    $("#rolesView_gridRoles").kendoGrid({
+        dataSource: rolesView_dataSource,
+        height: 550,
+        toolbar: [
+                { name: "create", text: "新增角色" }
+        ],
+        columns: [
+            { field: "name", title: "角色名稱", width: "120px" },
+            {
+                command: [
+                                    { name: "edit", text: "修改" },
+                                    { name: "destroy", text: "刪除" }
+                                ],
+                                title: "&nbsp;", width: "250px"
+            }
+        ],
+        editable: "inline"        
+    });
+
+    
+</script>

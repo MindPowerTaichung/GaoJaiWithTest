@@ -1,0 +1,10 @@
+﻿在本專案中JavaScript的全域變數請統一宣告在: globals.js
+
+Global Variable全域變數：
+能夠在函式內或函式外宣告，可於整個網頁範圍內調用，所以整個網頁中雖然可以有無數個不同名稱的 Global Variable，但僅會有一個獨立的 Global Variable 名稱，若重覆名稱則會覆蓋變數值，網頁關閉時，Global Variable 亦失效。
+
+Local Variable 區域變數：
+僅能夠在函式中透過關鍵字 var 宣告，每個不同的函式可以有相同的 Local Variable 變數名稱，換句話說，每個函式間的 Local Variable 互不干涉，也無法在函式外其他地方調用，當函式結束工作後，Local Variable 亦失效。
+
+注意:
+僅有在函式（function）內，透過 var 所宣告的變數才能算是 Local Variable 區域變數，若沒有使用 var 關鍵字宣告，無論是在哪裡宣告的變數，都會屬於 Global Variable 全域變數!!

@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>MPERP2015 登入</title>
+
+    <!-- lib css-->
+    <link href="views/lib/bootstrap-3.3.4/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="views/lib/SDAdmin2/dist/css/sb-admin-2.css" rel="stylesheet" />
+    <link href="views/lib/font-awesome-4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+    
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h1><i class="fa fa-key fa-rotate-90"></i> 登入</h1>
+                        <h3 id="msgTitle" class="panel-title">請輸入您的登入資訊...</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form role="form">
+                            <fieldset>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="帳號" id="txtUserName" autofocus />
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="密碼" id="txtPassword" type="password" value="" />
+                                </div>
+                                <!--<div class="checkbox">
+                                    <label>
+                                        <input id="chkRememberMe" type="checkbox" value="true">記住我
+                                    </label>
+                                </div>-->
+                                <input type="button" id="btnLogin" class="btn btn-lg btn-success btn-block" value="登入" />
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="views/lib/jQuery/jquery-2.1.4.min.js"></script>
+    <script src="views/lib/js.cookie/js.cookie.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $("#btnLogin").click(function () {
+
+                //游標顯示progress
+                //$("body").css("cursor", "progress");                
+                $.post('api/Authentication', { username: $("#txtUserName").val(), password: $("#txtPassword").val() })
+                .success(function (response) {
+                    if (response.success) {
+                        //AuthenticationService.SetCredentials($scope.username, $scope.password);
+                        Cookies.set('token', response.token);
+                        Cookies.set('userName', response.token);
+                        window.location.href = "workspace.html";
+                    } else {
+                        //游標顯示default
+                        //$("body").css("cursor", "default"); 
+                        $("#msgTitle").addClass("alert alert-danger").html(response.message);
+                    }
+                    
+                });
+
+            });
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,2 @@
+﻿The unique identifier of the Model
+http://docs.telerik.com/kendo-ui/api/javascript/data/model#fields-uid

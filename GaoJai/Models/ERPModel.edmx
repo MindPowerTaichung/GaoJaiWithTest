@@ -1,0 +1,877 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ERPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="catCurrency">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="No" Type="nvarchar" MaxLength="32" />
+          <Property Name="Name" Type="nvarchar" MaxLength="64" />
+          <Property Name="Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="catCustomer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="No" Type="nvarchar" MaxLength="32" />
+          <Property Name="Name" Type="nvarchar" MaxLength="64" />
+          <Property Name="Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="Categories">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <EntityType Name="catFactory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="No" Type="nvarchar" MaxLength="32" />
+          <Property Name="Name" Type="nvarchar" MaxLength="64" />
+          <Property Name="Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="catPay">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="No" Type="nvarchar" MaxLength="32" />
+          <Property Name="Name" Type="nvarchar" MaxLength="64" />
+          <Property Name="Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="Customers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Cat" Type="int" />
+          <Property Name="Agent" Type="int" />
+          <Property Name="NO" Type="nvarchar" MaxLength="32" />
+          <Property Name="Name" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="Sname" Type="nvarchar" MaxLength="32" />
+          <Property Name="Unid" Type="nvarchar" MaxLength="10" />
+          <Property Name="Contact1" Type="nvarchar" MaxLength="16" />
+          <Property Name="Contact2" Type="nvarchar" MaxLength="16" />
+          <Property Name="Email1" Type="nvarchar" MaxLength="128" />
+          <Property Name="Email2" Type="nvarchar" MaxLength="128" />
+          <Property Name="Email3" Type="nvarchar" MaxLength="128" />
+          <Property Name="Telephone1" Type="nvarchar" MaxLength="16" />
+          <Property Name="Telephone2" Type="nvarchar" MaxLength="16" />
+          <Property Name="Telephone3" Type="nvarchar" MaxLength="16" />
+          <Property Name="Website" Type="nvarchar" MaxLength="128" />
+          <Property Name="Fax" Type="nvarchar" MaxLength="16" />
+          <Property Name="Address" Type="nvarchar" MaxLength="128" />
+          <Property Name="Shipaddr" Type="nvarchar" MaxLength="128" />
+          <Property Name="Invoiceaddr" Type="nvarchar" MaxLength="128" />
+          <Property Name="Pay" Type="int" />
+          <Property Name="Currency" Type="int" />
+          <Property Name="Lasttrade" Type="datetime" />
+          <Property Name="Note" Type="nvarchar(max)" />
+          <Property Name="Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="Factories">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Cat" Type="int" />
+          <Property Name="Type" Type="int" />
+          <Property Name="NO" Type="nvarchar" MaxLength="32" />
+          <Property Name="Name" Type="nvarchar" MaxLength="64" />
+          <Property Name="Sname" Type="nvarchar" MaxLength="32" />
+          <Property Name="Unid" Type="nvarchar" MaxLength="10" />
+          <Property Name="Contact1" Type="nvarchar" MaxLength="16" />
+          <Property Name="Contact2" Type="nvarchar" MaxLength="16" />
+          <Property Name="Email1" Type="nvarchar" MaxLength="128" />
+          <Property Name="Email2" Type="nvarchar" MaxLength="128" />
+          <Property Name="Email3" Type="nvarchar" MaxLength="128" />
+          <Property Name="Telephone1" Type="nvarchar" MaxLength="16" />
+          <Property Name="Telephone2" Type="nvarchar" MaxLength="16" />
+          <Property Name="Telephone3" Type="nvarchar" MaxLength="16" />
+          <Property Name="Website" Type="nvarchar" MaxLength="128" />
+          <Property Name="Fax" Type="nvarchar" MaxLength="16" />
+          <Property Name="Address" Type="nvarchar" MaxLength="128" />
+          <Property Name="Shipaddr" Type="nvarchar" MaxLength="128" />
+          <Property Name="Invoiceaddr" Type="nvarchar" MaxLength="128" />
+          <Property Name="Pay" Type="int" />
+          <Property Name="Currency" Type="int" />
+          <Property Name="Lasttrade" Type="datetime" />
+          <Property Name="Note" Type="nvarchar(max)" />
+          <Property Name="sUser" Type="nvarchar" MaxLength="256" />
+          <Property Name="sCreate" Type="datetime" />
+          <Property Name="sUpdate" Type="datetime" />
+          <Property Name="Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="OrderDetails">
+          <Key>
+            <PropertyRef Name="Order_Id" />
+            <PropertyRef Name="Product_Id" />
+          </Key>
+          <Property Name="Order_Id" Type="int" Nullable="false" />
+          <Property Name="Product_Id" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderDate" Type="datetime" Nullable="false" />
+          <Property Name="Customer_Id" Type="int" Nullable="false" />
+          <Property Name="Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="Price" Type="float" Nullable="false" />
+          <Property Name="Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Category_Id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="typeCustomer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="No" Type="nvarchar" MaxLength="32" />
+          <Property Name="Name" Type="nvarchar" MaxLength="64" />
+          <Property Name="Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="typeFactory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="No" Type="nvarchar" MaxLength="32" />
+          <Property Name="Name" Type="nvarchar" MaxLength="64" />
+          <Property Name="Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <Association Name="FK_CategoryProduct">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="Category_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customers_catCurrency">
+          <End Role="catCurrency" Type="Self.catCurrency" Multiplicity="0..1" />
+          <End Role="Customers" Type="Self.Customers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catCurrency">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Customers">
+              <PropertyRef Name="Currency" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customers_catCustomer">
+          <End Role="catCustomer" Type="Self.catCustomer" Multiplicity="0..1" />
+          <End Role="Customers" Type="Self.Customers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catCustomer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Customers">
+              <PropertyRef Name="Cat" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customers_catPay">
+          <End Role="catPay" Type="Self.catPay" Multiplicity="0..1" />
+          <End Role="Customers" Type="Self.Customers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catPay">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Customers">
+              <PropertyRef Name="Pay" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Factories_catCurrency">
+          <End Role="catCurrency" Type="Self.catCurrency" Multiplicity="0..1" />
+          <End Role="Factories" Type="Self.Factories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catCurrency">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Factories">
+              <PropertyRef Name="Currency" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Factories_catFactory">
+          <End Role="catFactory" Type="Self.catFactory" Multiplicity="0..1" />
+          <End Role="Factories" Type="Self.Factories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catFactory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Factories">
+              <PropertyRef Name="Cat" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Factories_catPay">
+          <End Role="catPay" Type="Self.catPay" Multiplicity="0..1" />
+          <End Role="Factories" Type="Self.Factories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catPay">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Factories">
+              <PropertyRef Name="Pay" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Factories_typeFactory">
+          <End Role="typeFactory" Type="Self.typeFactory" Multiplicity="0..1" />
+          <End Role="Factories" Type="Self.Factories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="typeFactory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Factories">
+              <PropertyRef Name="Type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetails_Orders">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="Order_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetails_Products">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="Product_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ERPModelStoreContainer">
+          <EntitySet Name="catCurrency" EntityType="Self.catCurrency" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="catCustomer" EntityType="Self.catCustomer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="catFactory" EntityType="Self.catFactory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="catPay" EntityType="Self.catPay" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Factories" EntityType="Self.Factories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="typeCustomer" EntityType="Self.typeCustomer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="typeFactory" EntityType="Self.typeFactory" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CategoryProduct" Association="Self.FK_CategoryProduct">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customers_catCurrency" Association="Self.FK_Customers_catCurrency">
+            <End Role="catCurrency" EntitySet="catCurrency" />
+            <End Role="Customers" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customers_catCustomer" Association="Self.FK_Customers_catCustomer">
+            <End Role="catCustomer" EntitySet="catCustomer" />
+            <End Role="Customers" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customers_catPay" Association="Self.FK_Customers_catPay">
+            <End Role="catPay" EntitySet="catPay" />
+            <End Role="Customers" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Factories_catCurrency" Association="Self.FK_Factories_catCurrency">
+            <End Role="catCurrency" EntitySet="catCurrency" />
+            <End Role="Factories" EntitySet="Factories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Factories_catFactory" Association="Self.FK_Factories_catFactory">
+            <End Role="catFactory" EntitySet="catFactory" />
+            <End Role="Factories" EntitySet="Factories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Factories_catPay" Association="Self.FK_Factories_catPay">
+            <End Role="catPay" EntitySet="catPay" />
+            <End Role="Factories" EntitySet="Factories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Factories_typeFactory" Association="Self.FK_Factories_typeFactory">
+            <End Role="typeFactory" EntitySet="typeFactory" />
+            <End Role="Factories" EntitySet="Factories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetails_Orders" Association="Self.FK_OrderDetails_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetails_Products" Association="Self.FK_OrderDetails_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="ERPModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="ERPModelContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Categories" EntityType="ERPModel.Category" />
+          <EntitySet Name="Products" EntityType="ERPModel.Product" />
+          <AssociationSet Name="CategoryProduct" Association="ERPModel.CategoryProduct">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <EntitySet Name="OrderDetails" EntityType="ERPModel.OrderDetail" />
+          <EntitySet Name="Orders" EntityType="ERPModel.Order" />
+          <AssociationSet Name="FK_OrderDetails_Orders" Association="ERPModel.FK_OrderDetails_Orders">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="OrderDetail" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetails_Products" Association="ERPModel.FK_OrderDetails_Products">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="OrderDetail" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <EntitySet Name="catCurrencies" EntityType="ERPModel.catCurrency" />
+          <EntitySet Name="catCustomers" EntityType="ERPModel.catCustomer" />
+          <EntitySet Name="catFactories" EntityType="ERPModel.catFactory" />
+          <EntitySet Name="catPays" EntityType="ERPModel.catPay" />
+          <EntitySet Name="Customers" EntityType="ERPModel.Customer" />
+          <EntitySet Name="Factories" EntityType="ERPModel.Factory" />
+          <EntitySet Name="typeFactories" EntityType="ERPModel.typeFactory" />
+          <AssociationSet Name="FK_Customers_catCurrency" Association="ERPModel.FK_Customers_catCurrency">
+            <End Role="catCurrency" EntitySet="catCurrencies" />
+            <End Role="Customer" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Factories_catCurrency" Association="ERPModel.FK_Factories_catCurrency">
+            <End Role="catCurrency" EntitySet="catCurrencies" />
+            <End Role="Factory" EntitySet="Factories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customers_catCustomer" Association="ERPModel.FK_Customers_catCustomer">
+            <End Role="catCustomer" EntitySet="catCustomers" />
+            <End Role="Customer" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Factories_catFactory" Association="ERPModel.FK_Factories_catFactory">
+            <End Role="catFactory" EntitySet="catFactories" />
+            <End Role="Factory" EntitySet="Factories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customers_catPay" Association="ERPModel.FK_Customers_catPay">
+            <End Role="catPay" EntitySet="catPays" />
+            <End Role="Customer" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Factories_catPay" Association="ERPModel.FK_Factories_catPay">
+            <End Role="catPay" EntitySet="catPays" />
+            <End Role="Factory" EntitySet="Factories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Factories_typeFactory" Association="ERPModel.FK_Factories_typeFactory">
+            <End Role="typeFactory" EntitySet="typeFactories" />
+            <End Role="Factory" EntitySet="Factories" />
+          </AssociationSet>
+          <EntitySet Name="typeCustomers" EntityType="ERPModel.typeCustomer" />
+          </EntityContainer>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="40" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Products" Relationship="ERPModel.CategoryProduct" FromRole="Category" ToRole="Product" />
+          <Property Name="Timestamp" Type="Binary" Nullable="false" annotation:StoreGeneratedPattern="Computed" FixedLength="true" MaxLength="8" ConcurrencyMode="Fixed" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="40" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Category" Relationship="ERPModel.CategoryProduct" FromRole="Product" ToRole="Category" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Timestamp" Type="Binary" Nullable="false" FixedLength="true" MaxLength="8" ConcurrencyMode="Fixed" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="OrderDetails" Relationship="ERPModel.FK_OrderDetails_Products" FromRole="Product" ToRole="OrderDetail" />
+        </EntityType>
+        <Association Name="CategoryProduct">
+          <End Type="ERPModel.Category" Role="Category" Multiplicity="1" />
+          <End Type="ERPModel.Product" Role="Product" Multiplicity="*" />
+        </Association>
+        <EntityType Name="OrderDetail">
+          <Key>
+            <PropertyRef Name="Order_Id" />
+            <PropertyRef Name="Product_Id" />
+          </Key>
+          <Property Name="Order_Id" Type="Int32" Nullable="false" />
+          <Property Name="Product_Id" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Order" Relationship="ERPModel.FK_OrderDetails_Orders" FromRole="OrderDetail" ToRole="Order" />
+          <NavigationProperty Name="Product" Relationship="ERPModel.FK_OrderDetails_Products" FromRole="OrderDetail" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Customer_Id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="OrderDetails" Relationship="ERPModel.FK_OrderDetails_Orders" FromRole="Order" ToRole="OrderDetail" />
+          <Property Name="Timestamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" ConcurrencyMode="Fixed" />
+        </EntityType>
+        <Association Name="FK_OrderDetails_Orders">
+          <End Type="ERPModel.Order" Role="Order" Multiplicity="1" />
+          <End Type="ERPModel.OrderDetail" Role="OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="Order_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetails_Products">
+          <End Type="ERPModel.Product" Role="Product" Multiplicity="1" />
+          <End Type="ERPModel.OrderDetail" Role="OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="Product_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="catCurrency">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="No" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="Customers" Relationship="ERPModel.FK_Customers_catCurrency" FromRole="catCurrency" ToRole="Customer" />
+          <NavigationProperty Name="Factories" Relationship="ERPModel.FK_Factories_catCurrency" FromRole="catCurrency" ToRole="Factory" />
+        </EntityType>
+        <EntityType Name="catCustomer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="No" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="Customers" Relationship="ERPModel.FK_Customers_catCustomer" FromRole="catCustomer" ToRole="Customer" />
+        </EntityType>
+        <EntityType Name="catFactory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="No" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="Factories" Relationship="ERPModel.FK_Factories_catFactory" FromRole="catFactory" ToRole="Factory" />
+        </EntityType>
+        <EntityType Name="catPay">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="No" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="Customers" Relationship="ERPModel.FK_Customers_catPay" FromRole="catPay" ToRole="Customer" />
+          <NavigationProperty Name="Factories" Relationship="ERPModel.FK_Factories_catPay" FromRole="catPay" ToRole="Factory" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Cat" Type="Int32" />
+          <Property Name="Agent" Type="Int32" />
+          <Property Name="NO" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Sname" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="Unid" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Contact1" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="Contact2" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="Email1" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Email2" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Email3" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Telephone1" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="Telephone2" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="Telephone3" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="Website" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Fax" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Shipaddr" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Invoiceaddr" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Pay" Type="Int32" />
+          <Property Name="Currency" Type="Int32" />
+          <Property Name="Lasttrade" Type="DateTime" Precision="3" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="catCurrency" Relationship="ERPModel.FK_Customers_catCurrency" FromRole="Customer" ToRole="catCurrency" />
+          <NavigationProperty Name="catCustomer" Relationship="ERPModel.FK_Customers_catCustomer" FromRole="Customer" ToRole="catCustomer" />
+          <NavigationProperty Name="catPay" Relationship="ERPModel.FK_Customers_catPay" FromRole="Customer" ToRole="catPay" />
+        </EntityType>
+        <EntityType Name="Factory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Cat" Type="Int32" />
+          <Property Name="Type" Type="Int32" />
+          <Property Name="NO" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Sname" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="Unid" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Contact1" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="Contact2" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="Email1" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Email2" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Email3" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Telephone1" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="Telephone2" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="Telephone3" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="Website" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Fax" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Shipaddr" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Invoiceaddr" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Pay" Type="Int32" />
+          <Property Name="Currency" Type="Int32" />
+          <Property Name="Lasttrade" Type="DateTime" Precision="3" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="sUser" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="sCreate" Type="DateTime" Precision="3" />
+          <Property Name="sUpdate" Type="DateTime" Precision="3" />
+          <Property Name="Timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="catCurrency" Relationship="ERPModel.FK_Factories_catCurrency" FromRole="Factory" ToRole="catCurrency" />
+          <NavigationProperty Name="catFactory" Relationship="ERPModel.FK_Factories_catFactory" FromRole="Factory" ToRole="catFactory" />
+          <NavigationProperty Name="catPay" Relationship="ERPModel.FK_Factories_catPay" FromRole="Factory" ToRole="catPay" />
+          <NavigationProperty Name="typeFactory" Relationship="ERPModel.FK_Factories_typeFactory" FromRole="Factory" ToRole="typeFactory" />
+        </EntityType>
+        <EntityType Name="typeFactory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="No" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="Factories" Relationship="ERPModel.FK_Factories_typeFactory" FromRole="typeFactory" ToRole="Factory" />
+        </EntityType>
+        <Association Name="FK_Customers_catCurrency">
+          <End Type="ERPModel.catCurrency" Role="catCurrency" Multiplicity="0..1" />
+          <End Type="ERPModel.Customer" Role="Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catCurrency">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="Currency" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Factories_catCurrency">
+          <End Type="ERPModel.catCurrency" Role="catCurrency" Multiplicity="0..1" />
+          <End Type="ERPModel.Factory" Role="Factory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catCurrency">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Factory">
+              <PropertyRef Name="Currency" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customers_catCustomer">
+          <End Type="ERPModel.catCustomer" Role="catCustomer" Multiplicity="0..1" />
+          <End Type="ERPModel.Customer" Role="Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catCustomer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="Cat" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Factories_catFactory">
+          <End Type="ERPModel.catFactory" Role="catFactory" Multiplicity="0..1" />
+          <End Type="ERPModel.Factory" Role="Factory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catFactory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Factory">
+              <PropertyRef Name="Cat" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customers_catPay">
+          <End Type="ERPModel.catPay" Role="catPay" Multiplicity="0..1" />
+          <End Type="ERPModel.Customer" Role="Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catPay">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="Pay" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Factories_catPay">
+          <End Type="ERPModel.catPay" Role="catPay" Multiplicity="0..1" />
+          <End Type="ERPModel.Factory" Role="Factory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catPay">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Factory">
+              <PropertyRef Name="Pay" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Factories_typeFactory">
+          <End Type="ERPModel.typeFactory" Role="typeFactory" Multiplicity="0..1" />
+          <End Type="ERPModel.Factory" Role="Factory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="typeFactory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Factory">
+              <PropertyRef Name="Type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="typeCustomer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="No" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ERPModelStoreContainer" CdmEntityContainer="ERPModelContainer">
+    <EntitySetMapping Name="Categories">
+      <EntityTypeMapping TypeName="IsTypeOf(ERPModel.Category)">
+        <MappingFragment StoreEntitySet="Categories">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Products">
+      <EntityTypeMapping TypeName="IsTypeOf(ERPModel.Product)">
+        <MappingFragment StoreEntitySet="Products">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrderDetails">
+      <EntityTypeMapping TypeName="IsTypeOf(ERPModel.OrderDetail)">
+        <MappingFragment StoreEntitySet="OrderDetails">
+          <ScalarProperty Name="Order_Id" ColumnName="Order_Id" />
+          <ScalarProperty Name="Product_Id" ColumnName="Product_Id" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Orders">
+      <EntityTypeMapping TypeName="IsTypeOf(ERPModel.Order)">
+        <MappingFragment StoreEntitySet="Orders">
+          <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="Customer_Id" ColumnName="Customer_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="CategoryProduct" TypeName="ERPModel.CategoryProduct" StoreEntitySet="Products">
+      <EndProperty Name="Category">
+        <ScalarProperty Name="Id" ColumnName="Category_Id" />
+      </EndProperty>
+      <EndProperty Name="Product">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+          <EntitySetMapping Name="catCurrencies">
+            <EntityTypeMapping TypeName="ERPModel.catCurrency">
+              <MappingFragment StoreEntitySet="catCurrency">
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="No" ColumnName="No" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="catCustomers">
+            <EntityTypeMapping TypeName="ERPModel.catCustomer">
+              <MappingFragment StoreEntitySet="catCustomer">
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="No" ColumnName="No" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="catFactories">
+            <EntityTypeMapping TypeName="ERPModel.catFactory">
+              <MappingFragment StoreEntitySet="catFactory">
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="No" ColumnName="No" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="catPays">
+            <EntityTypeMapping TypeName="ERPModel.catPay">
+              <MappingFragment StoreEntitySet="catPay">
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="No" ColumnName="No" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="ERPModel.Customer">
+              <MappingFragment StoreEntitySet="Customers">
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="Lasttrade" ColumnName="Lasttrade" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Pay" ColumnName="Pay" />
+                <ScalarProperty Name="Invoiceaddr" ColumnName="Invoiceaddr" />
+                <ScalarProperty Name="Shipaddr" ColumnName="Shipaddr" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Website" ColumnName="Website" />
+                <ScalarProperty Name="Telephone3" ColumnName="Telephone3" />
+                <ScalarProperty Name="Telephone2" ColumnName="Telephone2" />
+                <ScalarProperty Name="Telephone1" ColumnName="Telephone1" />
+                <ScalarProperty Name="Email3" ColumnName="Email3" />
+                <ScalarProperty Name="Email2" ColumnName="Email2" />
+                <ScalarProperty Name="Email1" ColumnName="Email1" />
+                <ScalarProperty Name="Contact2" ColumnName="Contact2" />
+                <ScalarProperty Name="Contact1" ColumnName="Contact1" />
+                <ScalarProperty Name="Unid" ColumnName="Unid" />
+                <ScalarProperty Name="Sname" ColumnName="Sname" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="NO" ColumnName="NO" />
+                <ScalarProperty Name="Agent" ColumnName="Agent" />
+                <ScalarProperty Name="Cat" ColumnName="Cat" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Factories">
+            <EntityTypeMapping TypeName="ERPModel.Factory">
+              <MappingFragment StoreEntitySet="Factories">
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="sUpdate" ColumnName="sUpdate" />
+                <ScalarProperty Name="sCreate" ColumnName="sCreate" />
+                <ScalarProperty Name="sUser" ColumnName="sUser" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="Lasttrade" ColumnName="Lasttrade" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Pay" ColumnName="Pay" />
+                <ScalarProperty Name="Invoiceaddr" ColumnName="Invoiceaddr" />
+                <ScalarProperty Name="Shipaddr" ColumnName="Shipaddr" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Website" ColumnName="Website" />
+                <ScalarProperty Name="Telephone3" ColumnName="Telephone3" />
+                <ScalarProperty Name="Telephone2" ColumnName="Telephone2" />
+                <ScalarProperty Name="Telephone1" ColumnName="Telephone1" />
+                <ScalarProperty Name="Email3" ColumnName="Email3" />
+                <ScalarProperty Name="Email2" ColumnName="Email2" />
+                <ScalarProperty Name="Email1" ColumnName="Email1" />
+                <ScalarProperty Name="Contact2" ColumnName="Contact2" />
+                <ScalarProperty Name="Contact1" ColumnName="Contact1" />
+                <ScalarProperty Name="Unid" ColumnName="Unid" />
+                <ScalarProperty Name="Sname" ColumnName="Sname" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="NO" ColumnName="NO" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Cat" ColumnName="Cat" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="typeFactories">
+            <EntityTypeMapping TypeName="ERPModel.typeFactory">
+              <MappingFragment StoreEntitySet="typeFactory">
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="No" ColumnName="No" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="typeCustomers">
+            <EntityTypeMapping TypeName="ERPModel.typeCustomer">
+              <MappingFragment StoreEntitySet="typeCustomer">
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="No" ColumnName="No" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

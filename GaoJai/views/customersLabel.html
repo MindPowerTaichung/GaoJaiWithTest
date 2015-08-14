@@ -1,0 +1,598 @@
+﻿<script>
+    //類別
+    var cat_apiUrl = "api/catCustomers";
+    var cat_dataSource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: cat_apiUrl,
+                dataType: "json"
+            }
+        },
+        error: function (err) {
+            var message = (err.xhr.responseText == "") ? "" : JSON.parse(err.xhr.responseText).message + "\n";
+            alert(err.status + "\n" + message + "將重新載入資料!");
+            console.log(err.status + "\n" + message + "將重新載入資料!");
+        },
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    no: { editable: true },
+                    name: { editable: true },
+                    timestampString: { editable: false }
+                }
+            }
+        }
+    });
+    //收付款條件
+    var pay_apiUrl = "api/catPays";
+    var pay_dataSource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: pay_apiUrl,
+                dataType: "json"
+            }
+        },
+        error: function (err) {
+            var message = (err.xhr.responseText == "") ? "" : JSON.parse(err.xhr.responseText).message + "\n";
+            alert(err.status + "\n" + message + "將重新載入資料!");
+            console.log(err.status + "\n" + message + "將重新載入資料!");
+        },
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    no: { editable: true },
+                    name: { editable: true },
+                    timestampString: { editable: false }
+                }
+            }
+        }
+    });
+    //幣別
+    var currency_apiUrl = "api/catCurrencies";
+    var currency_dataSource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: currency_apiUrl,
+                dataType: "json"
+            }
+        },
+        error: function (err) {
+            var message = (err.xhr.responseText == "") ? "" : JSON.parse(err.xhr.responseText).message + "\n";
+            alert(err.status + "\n" + message + "將重新載入資料!");
+            console.log(err.status + "\n" + message + "將重新載入資料!");
+        },
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    no: { editable: true },
+                    name: { editable: true },
+                    timestampString: { editable: false }
+                }
+            }
+        }
+    });
+</script>
+
+<div id="gridCustomersLabel"></div>
+<div id="details"></div>
+<style type="text/css">
+    .k-edit-form-container {
+        width: 900px;
+        margin-left: 10px;
+    }
+
+        .k-edit-form-container .k-edit-label {
+            width: 150px;
+            vertical-align: bottom;
+            font-size: medium;
+        }
+
+        .k-edit-form-container .k-textbox {
+            width: 250px;
+        }
+</style>
+<script type="text/x-kendo-template" id="printtemplate">
+    <div>
+        <input type="button" value="列印貼紙" style="width: 100px" onclick="showPrintAll()"/>
+    </div>
+</script>
+<script type="text/x-kendo-template" id="detailtemplate">
+    <table class="k-grid table">
+        <tr>
+            <td class="tdTitle01" style="width:70px" align="center">
+                類別
+            </td>
+            <td class="tdContent01">
+                #= (catName == null) ? '' : catName #
+            </td>
+            <td class="tdTitle01" style="width:70px" align="center"></td>
+            <td class="tdContent01"></td>
+            <td class="tdTitle01" style="width:70px" align="center">
+                廠商編號
+            </td>
+            <td class="tdContent01">
+                #= (no == null) ? '' : no #
+            </td>
+            <td class="tdTitle01" style="width:90px" align="center">
+                最後交易日
+            </td>
+            <td class="tdContent01">
+                #= (lasttrade == null) ? '' : kendo.toString(kendo.parseDate(lasttrade), 'yyyy-MM-dd') #
+            </td>
+        </tr>
+        <tr>
+            <td class="tdTitle01" style="width:70px" align="center">
+                公司名稱
+            </td>
+            <td class="tdContent02">
+                #= (name == null) ? '' : name #
+            </td>
+            <td class="tdTitle01" style="width:70px" align="center">
+                簡稱
+            </td>
+            <td class="tdContent02">
+                #= (sname == null) ? '' : sname #
+            </td>
+            <td class="tdTitle01" style="width:70px" align="center">
+                統一編號
+            </td>
+            <td class="tdContent02">
+                #= (unid == null) ? '' : unid #
+            </td>
+            <td class="tdTitle01" style="width:90px" align="center">
+                公司電話
+            </td>
+            <td class="tdContent02">
+                #= (telephone1 == null) ? '' : telephone1 #
+            </td>
+        </tr>
+        <tr>
+            <td class="tdTitle01" style="width:70px" align="center">
+                傳真
+            </td>
+            <td class="tdContent01">
+                #= (fax == null) ? '' : fax #
+            </td>
+            <td class="tdTitle01" style="width:70px" align="center">
+                Email(公)
+            </td>
+            <td class="tdContent01">
+                #= (email1 == null) ? '' : email1 #
+            </td>
+            <td class="tdTitle01" style="width:70px" align="center">
+                網址
+            </td>
+            <td class="tdContent01">
+                #= (website == null) ? '' : website #
+            </td>
+            <td class="tdTitle01" style="width:90px" align="center">
+                付款條件
+            </td>
+            <td class="tdContent01">
+                #= (payName == null) ? '' : payName #
+            </td>
+        </tr>
+        <tr>
+            <td class="tdTitle01" style="width:70px" align="center">
+                負責人
+            </td>
+            <td class="tdContent02">
+                #= (contact1 == null) ? '' : contact1 #
+            </td>
+            <td class="tdTitle01" style="width:70px" align="center">
+                電話
+            </td>
+            <td class="tdContent02">
+                #= (telephone2 == null) ? '' : telephone2 #
+            </td>
+            <td class="tdTitle01" style="width:70px" align="center">
+                Email
+            </td>
+            <td class="tdContent02">
+                #= (email2 == null) ? '' : email2 #
+            </td>
+            <td class="tdTitle01" style="width:90px" align="center">
+                交易幣別
+            </td>
+            <td class="tdContent02">
+                #= (currencyName == null) ? '' : currencyName #
+            </td>
+        </tr>
+        <tr>
+            <td class="tdTitle01" style="width:70px" align="center">
+                聯絡人
+            </td>
+            <td class="tdContent01">
+                #= (contact2 == null) ? '' : contact2 #
+            </td>
+            <td class="tdTitle01" style="width:70px" align="center">
+                電話
+            </td>
+            <td class="tdContent01">
+                #= (telephone3 == null) ? '' : telephone3 #
+            </td>
+            <td class="tdTitle01" style="width:70px" align="center">
+                Email
+            </td>
+            <td class="tdContent01">
+                #= (email3 == null) ? '' : email3 #
+            </td>
+            <td class="tdTitle01" style="width:90px" align="center"></td>
+            <td class="tdContent01"></td>
+        </tr>
+        <tr>
+            <td class="tdTitle01" style="width:70px" align="center">
+                公司地址
+            </td>
+            <td class="tdContent02" colspan="3">
+                #= (address == null) ? '' : address #
+            </td>
+            <td class="tdTitle01" style="width:70px" align="center">
+                送貨地址
+            </td>
+            <td class="tdContent02" colspan="3">
+                #= (shipaddr == null) ? '' : shipaddr #
+            </td>
+        </tr>
+        <tr>
+            <td class="tdTitle01" style="width:70px" align="center">
+                帳單地址
+            </td>
+            <td class="tdContent01" colspan="3">
+                #= (invoiceaddr == null) ? '' : invoiceaddr #
+            </td>
+            <td class="tdTitle01" style="width:70px" align="center">
+                備註
+            </td>
+            <td class="tdContent01" colspan="3">
+                #= (note == null) ? '' : note #
+            </td>
+        </tr>
+    </table>
+</script>
+<script>
+    var initialLoadLabel = true;
+    var customersLabelView_apiUrl = "api/customers";
+    var customersLabelView_dataSource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: customersLabelView_apiUrl,
+                dataType: "json"
+            },
+            update: {
+                url: function (data) {
+                    return customersLabelView_apiUrl + "/" + data.id;
+                },
+                type: "put",
+                contentType: "application/json",
+                dataType: "json"
+            },
+            destroy: {
+                url: function (data) {
+                    return customersLabelView_apiUrl + "/" + data.id;
+                },
+                type: "delete",
+                dataType: "json"
+            },
+            create: {
+                url: customersLabelView_apiUrl,
+                type: "post",
+                contentType: "application/json",
+                dataType: "json"
+            },
+            parameterMap: function (data, operation) {
+                if (operation == "create") {
+                    data.id = 0;
+                }
+                return JSON.stringify(data);
+            }
+        },
+        requestStart: function () {
+            if (initialLoadLabel)
+                kendo.ui.progress($("#gridCustomersLabel"), true);
+        },
+        requestEnd: function () {
+            if (initialLoadLabel)
+                kendo.ui.progress($("#gridCustomersLabel"), false);
+            initialLoadLabel = false;
+
+        },
+        batch: false,
+        pageSize: 10,
+        error: function (err) {
+            var message = (err.xhr.responseText == "") ? "" : JSON.parse(err.xhr.responseText).message + "\n";
+            alert(err.status + "\n" + message + "將重新載入資料!");
+            console.log(err.status + "\n" + message + "將重新載入資料!");
+            $('#gridCustomersLabel').data('kendoGrid').dataSource.read();
+            $('#gridCustomersLabel').data('kendoGrid').refresh();
+        },
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    id: { editable: false, nullable: false },
+                    cat: { editable: true },
+                    catName: { nullable: true },
+                    no: { editable: true, validation: { required: true } },
+                    name: { editable: true, validation: { required: true } },
+                    sname: { editable: true, validation: { required: true } },
+                    unid: { editable: true },
+                    contact1: { editable: true, validation: { required: true } },
+                    contact2: { editable: true },
+                    email1: { editable: true },
+                    email2: { editable: true },
+                    email3: { editable: true },
+                    telephone1: { editable: true },
+                    telephone2: { editable: true },
+                    telephone3: { editable: true },
+                    website: { editable: true },
+                    fax: { editable: true },
+                    address: { editable: true },
+                    shipaddr: { editable: true },
+                    Invoiceaddr: { editable: true },
+                    pay: { editable: true },
+                    payName: { nullable: true },
+                    website: { editable: true },
+                    fax: { editable: true },
+                    address: { editable: true },
+                    shipaddr: { editable: true },
+                    Invoiceaddr: { editable: true },
+                    currency: { editable: true },
+                    currencyName: { nullable: true },
+                    lasttrade: { editable: true },
+                    Note: { editable: true },
+                    timestampString: { editable: false }
+                }
+            }
+        }
+    });
+    $("#gridCustomersLabel").kendoGrid({
+        dataSource: customersLabelView_dataSource,
+        detailTemplate: kendo.template($("#detailtemplate").html()),
+        pageable: true,
+        sortable: true,
+        height: "600px",
+        selectable: "multiple",
+        filterable:
+            {
+                extra: false,
+                operators: {
+                    string: {
+                        Contains: "包含"
+                    }
+                }
+            },
+        toolbar: kendo.template($("#printtemplate").html()),
+        columns: [
+            { field: "id", hidden: true },
+            { field: "catName", title: "類別", width: "80px" },
+            { field: "no", title: "編號", width: "100px" },
+            { field: "name", title: "名稱" },
+            { field: "sname", title: "簡稱", hidden: true },
+            { field: "unid", title: "統一編號", hidden: true },
+            { field: "telephone1", title: "公司電話" },
+            { field: "fax", title: "公司Fax", hidden: true },
+            { field: "email1", title: "公司Email", hidden: true },
+            { field: "website", title: "公司網站", hidden: true },
+            { field: "address", title: "公司地址" },
+            { field: "shipaddr", title: "送貨地址", hidden: true },
+            { field: "invoiceaddr", title: "發票地址", hidden: true },
+            { field: "contact1", title: "負責人", hidden: true },
+            { field: "telephone2", title: "負責人電話", hidden: true },
+            { field: "email2", title: "負責人Email", hidden: true },
+            { field: "contact2", title: "聯絡人", hidden: true },
+            { field: "telephone3", title: "聯絡人電話", hidden: true },
+            { field: "pay", title: "付款條件", hidden: true },
+            { field: "currency", title: "交易幣別", hidden: true },
+            { field: "note", title: "備註", hidden: true },
+            { command: { text: "列印", click: showPrints }, title: " ", width: "180px" }
+        ],
+    });
+
+    //單筆列印
+    var kendoWindow = $("<div id='window'/>").kendoWindow({
+        title: "列印客戶標籤",
+        resizable: false,
+        modal: true,
+        viewable: false,
+        width:"500px",
+        content: {
+            template: $("#label-print").html()
+        }
+    }).data("kendoWindow");
+    //多筆列印
+    var kendoWindowAll = $("<div id='window'/>").kendoWindow({
+        title: "列印客戶標籤-多筆",
+        resizable: false,
+        modal: true,
+        viewable: false,
+        width: "500px",
+        content: {
+            template: $("#label-printAll").html()
+        },
+    }).data("kendoWindow");
+    var printCustomer;
+    function showPrints(e) {
+        e.preventDefault();
+        printCustomer = this.dataItem($(e.currentTarget).closest("tr"));
+        var dataItem = { name: printCustomer["name"], telephone: printCustomer.telephone1, addr: printCustomer.address };
+        kendo.bind(kendoWindow.element, dataItem);
+        kendoWindow.open().center();
+    }
+
+    function showPrintAll(e) {
+        var customerGrid = $("#gridCustomersLabel").data("kendoGrid");
+        var rows = customerGrid.select();
+        if (rows.length == 0)
+        {
+            alert("未選取任何客戶!!");
+        } else {
+            kendoWindowAll.open().center();
+        }
+        
+    }
+
+    var teldata = [
+    { text: "公司", value: "telephone1" },
+    { text: "負責人", value: "telephone2" },
+    { text: "聯絡人", value: "telephone3" }
+    ];
+
+    $("#telList").kendoDropDownList({
+        dataTextField: "text",
+        dataValueField: "value",
+        dataSource: teldata,
+        change: onChange
+    });
+    $("#telListAll").kendoDropDownList({
+        dataTextField: "text",
+        dataValueField: "value",
+        dataSource: teldata
+    });
+    var addrdata = [
+    { text: "公司", value: "address" },
+    { text: "運送", value: "shipaddr" },
+    { text: "發票", value: "invoiceaddr" }
+    ];
+    $("#addrList").kendoDropDownList({
+        dataTextField: "text",
+        dataValueField: "value",
+        dataSource: addrdata,
+        change: onChange
+    });
+    $("#addrListAll").kendoDropDownList({
+        dataTextField: "text",
+        dataValueField: "value",
+        dataSource: addrdata
+    });
+    function onChange() {
+        var addrField = $("#addrList").val();
+        var telField = $("#telList").val();
+       //debugger;
+        var dataItem = { name: printCustomer["name"], telephone: printCustomer[telField], addr: printCustomer[addrField] };
+        kendo.bind(kendoWindow.element, dataItem);
+    };
+
+    function exportPDF() {
+        //debugger;
+        var dataItem = { name: $("#labelName").text(), telephone: $("#labeTelephone").text(), addr: $("#labeAddress").text(), num: $("#labeNum").val() },
+            items = [];
+        items.push(dataItem);
+
+        var pdfExportUrl = "Reports/CustomerLabelReportHandler.ashx",
+            formToSubmit = $("<form  method='post' />").attr('action', pdfExportUrl),
+            input = $("<input />")
+               .attr("type", "hidden")
+               .attr("name", "record").val(JSON.stringify(items));
+        formToSubmit.append($(input));
+        formToSubmit.submit();
+
+        kendoWindow.close();
+    }
+
+    function exportPDFAll() {
+        var customerGrid = $("#gridCustomersLabel").data("kendoGrid");
+        var rows = customerGrid.select();
+        var items = [];
+        var teltype = $("#telListAll").data("kendoDropDownList").value();
+        var addrtype = $("#addrListAll").data("kendoDropDownList").value();
+        rows.each(function (index, row) {
+            var selectedItem = customerGrid.dataItem(row);
+            var dataItem = { name: selectedItem.name, telephone: selectedItem[teltype], telephone3: selectedItem["telephone3"], addr: selectedItem[addrtype], num: $("#labeNumAll").val() };
+            items.push(dataItem);
+        });
+        //debugger;
+        var pdfExportUrl = "Reports/CustomerLabelReportHandler.ashx",
+            formToSubmit = $("<form  method='post' />").attr('action', pdfExportUrl),
+            input = $("<input />")
+               .attr("type", "hidden")
+               .attr("name", "record").val(JSON.stringify(items));
+        formToSubmit.append($(input));
+        formToSubmit.submit();
+
+        kendoWindow.close();
+    }
+</script>
+<script id="label-print" type="text/x-kendo-template">
+    <div>
+        <table class="k-grid table" style="font-size:large">
+            <tr>
+                <td class="tdContent01" colspan="2">
+                    <span id="labelName" data-bind="text: name"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdTitle01" style="width:70px">
+                    <input id="telList" value="telephone1" style="width:100px" />
+                </td>
+                <td class="tdContent02">
+                    <span data-bind="text: telephone" id="labeTelephone"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdTitle01" style="width:70px">
+                    <input id="addrList" value="address" style="width:100px" />
+                </td>
+                <td class="tdContent01">
+                    <span data-bind="text: addr" id="labeAddress"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdTitle01" style="width:70px">
+                    張數：
+                </td>
+                <td class="tdContent02">
+                    <input type="number" value="1" style="width:50px" min="0" id="labeNum">
+                </td>
+            </tr>
+            <tr>
+                <td class="tdContent01" colspan="2">
+                    <input type="button" value="列印" onclick="exportPDF();">
+                </td>
+            </tr>
+        </table>
+    </div>
+</script>
+<script id="label-printAll" type="text/x-kendo-template">
+    <div id="labelAll-window">
+        <table class="k-grid table" style="font-size:large">
+            <tr>
+                <td class="tdContent01" colspan="2">
+                    <span id="labelName" data-bind="text: name"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdTitle01" style="width:70px">
+                    <label>電話</label>
+                </td>
+                <td class="tdContent02">
+                    <input id="telListAll" style="width:100px" />
+                </td>
+            </tr>
+            <tr>
+                <td class="tdTitle01" style="width:70px">
+                    <label>住址</label>
+                </td>
+                <td class="tdContent01">
+                    <input id="addrListAll" style="width:100px" />
+                </td>
+            </tr>
+            <tr>
+                <td class="tdTitle01" style="width:70px">
+                    張數：
+                </td>
+                <td class="tdContent02">
+                    <input type="number" value="1" style="width:50px" min="0" id="labeNumAll">
+                </td>
+            </tr>
+            <tr>
+                <td class="tdContent01" colspan="2">
+                    <input type="button" value="列印" onclick="exportPDFAll();">
+                </td>
+            </tr>
+        </table>
+    </div>
+</script>

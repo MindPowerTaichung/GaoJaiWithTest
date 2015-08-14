@@ -1,0 +1,48 @@
+﻿.tdTitle01 {
+    background-color: #7ea700;
+    font-weight: bold;
+    color: white;
+}
+
+.tdContent01 {
+    background-color: #F5FFEB;
+}
+
+.tdTitle02 {
+    background-color: #e6dede;
+    font-weight: bold;
+    color: #754900;
+}
+
+.tdContent02 {
+    background-color: white;
+}
+
+body, td, th {
+    font-family: Lato, Helvetica, Arial;
+}
+/*
+        grid表頭
+        */
+.k-grid th.k-header,
+.k-grid th.k-header .k-link {
+    font-size: 16px;
+    background-color: #7ea700;
+    color: white;
+}
+/*
+        grid表身
+        */
+.k-grid td {
+    font-size: 16px;
+}
+
+.k-grid {
+    font-size: 16px;
+}
+
+.navbar-default .sidebar {
+    font-size:medium;
+    font-weight:bold;
+	color:yellow;
+}

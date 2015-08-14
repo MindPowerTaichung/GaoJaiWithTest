@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="49fafdbf6c594d838c43bd2ebcbf2525" Name="Diagram1" DisplayType="true" ZoomLevel="100" >
+        <EntityTypeShape EntityType="ERPModel.Category" Width="2" PointX="0.625" PointY="0.5" />
+        <EntityTypeShape EntityType="ERPModel.Product" Width="1.5" PointX="3.125" PointY="0.5" />
+        <AssociationConnector Association="ERPModel.CategoryProduct" />
+        <EntityTypeShape EntityType="ERPModel.OrderDetail" Width="1.5" PointX="4.875" PointY="0.5" />
+        <EntityTypeShape EntityType="ERPModel.Order" Width="1.5" PointX="6.625" PointY="0.5" />
+        <AssociationConnector Association="ERPModel.FK_OrderDetails_Orders" />
+        <AssociationConnector Association="ERPModel.FK_OrderDetails_Products" />
+        <EntityTypeShape EntityType="ERPModel.catCurrency" Width="1.5" PointX="8.25" PointY="7.375" />
+        <EntityTypeShape EntityType="ERPModel.catCustomer" Width="1.5" PointX="8.25" PointY="4" />
+        <EntityTypeShape EntityType="ERPModel.catFactory" Width="1.5" PointX="11.25" PointY="2.125" />
+        <EntityTypeShape EntityType="ERPModel.catPay" Width="1.5" PointX="8.25" PointY="10.75" />
+        <EntityTypeShape EntityType="ERPModel.Customer" Width="1.5" PointX="10.5" PointY="5.25" />
+        <EntityTypeShape EntityType="ERPModel.Factory" Width="1.5" PointX="13.5" PointY="4.875" />
+        <EntityTypeShape EntityType="ERPModel.typeFactory" Width="1.5" PointX="11.25" PointY="12.875" />
+        <AssociationConnector Association="ERPModel.FK_Customers_catCurrency" />
+        <AssociationConnector Association="ERPModel.FK_Factories_catCurrency" />
+        <AssociationConnector Association="ERPModel.FK_Customers_catCustomer" />
+        <AssociationConnector Association="ERPModel.FK_Factories_catFactory" />
+        <AssociationConnector Association="ERPModel.FK_Customers_catPay" />
+        <AssociationConnector Association="ERPModel.FK_Factories_catPay" />
+        <AssociationConnector Association="ERPModel.FK_Factories_typeFactory" />
+        <EntityTypeShape EntityType="ERPModel.typeCustomer" Width="1.5" PointX="6" PointY="3.75" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

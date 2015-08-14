@@ -1,0 +1,239 @@
+﻿<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>高舺工業資訊系統</title>
+
+    <!-- lib css -->
+    <link href="views/lib/bootstrap-3.3.4/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="views/lib/metisMenu/metisMenu.min.css" rel="stylesheet" />
+    <link href="views/lib/SDAdmin2/dist/css/sb-admin-2.css" rel="stylesheet" />
+    <link href="views/lib/font-awesome-4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+
+    <!-- Kendo UI -->
+    <link href="views/lib/Kendo/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="views/lib/Kendo/styles/kendo.metro.min.css" rel="stylesheet" />
+    <link href="views/lib/Kendo/styles/kendo.dataviz.min.css" rel="stylesheet" />
+    <link href="views/lib/Kendo/styles/kendo.dataviz.metro.min.css" rel="stylesheet" />
+
+    <!--GAOJAI-->
+    <link href="views/css/GAOJAI.css" rel="stylesheet" />
+
+    <!-- lib -->
+    <script src="views/lib/jQuery/jquery-2.1.4.min.js"></script>
+    <script src="views/lib/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script src="views/lib/metisMenu/metisMenu.min.js"></script>
+    <script src="views/lib/SDAdmin2/dist/js/sb-admin-2.js"></script>
+    <script src="views/lib/js.cookie/js.cookie.js"></script>
+
+    <!--Kendo UI-->
+    <script src="views/lib/Kendo/js/kendo.all.min.js"></script>
+    <script src="views/lib/Kendo/js/messages/kendo.messages.zh-TW.min.js"></script>
+    <!--MP-->
+    <script src="views/scripts/mp_utilities.js"></script>
+    <script src="views/scripts/globals.js"></script>
+    <script src="views/scripts/changePassword.js"></script>
+
+</head>
+<body>
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="workspace.html"><img src="views/images/GAOJAI-logo2.png" width="200" /></a>
+            </div>
+            <!-- /.navbar-header -->
+            <ul class="nav navbar-top-links navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i> <span id="userNameLabel"></span> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li>
+                            <a href="#"><i class="fa fa-user fa-fw"></i> 使用者資訊</a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="prepareChangePassword();"><i class="fa fa-gear fa-fw"></i> 變更密碼</a>
+                        </li>
+                        <li class="adminMenu">
+                            <a href="#" onclick="menuClick('功能選單設定', 'views/menus.html');"><i class="fa fa-gear fa-fw"></i>功能選單設定</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="login.html" onclick="clearToken();"><i class="fa fa-sign-out fa-fw"></i> 登出</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav in" id="side-menu"></ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <!-- Page Content -->
+        <div id="page-wrapper" style="padding:0; background-image:url('views/images/GAOJAI-logo.png');background-repeat:no-repeat;background-position:center">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div id="tabstrip"></div>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+    </div>
+    <!-- /#page-wrapper -->
+
+    <!------------------------------------------------------------------------------------------------------------------------------------------------------------>
+    <div id="workspace_changePassword"></div>
+
+    <script id="changePassword-template" type="text/x-kendo-template">
+        <div id="details-container">
+            <div class="k-edit-label">
+                <label for="userName">使用者名稱</label> :
+            </div>
+            <input type="text" readonly class="k-input k-textbox" id="txtUserName" value="#= userName #">
+            <div class="k-edit-label">
+                <label for="password">密碼</label> :
+            </div>
+            <input type="text" class="k-input k-textbox" id="txtPassword" value="">            
+            <p>
+                <input type="button" onclick="changePassword();" class="k-input k-button" value="確定">
+                <input type="button" onclick="closeChangePasswordWindow();" class="k-input k-button" value="取消">
+            </p>
+        </div>
+    </script>
+
+    <script type="text/x-kendo-template" id="template">
+        # if (hasChildren) {#
+        <li>
+            <a><i class="#:cssClass #"></i> #:text #<span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                # for (var j = 0; j < subMenus.length; j++) { #
+                <li onclick="menuClick('#: text+' / '+subMenus[j].text #', '#:subMenus[j].contentUrl #');"><a><i class="#:subMenus[j].cssClass #"></i> #:subMenus[j].text #</a></li>
+                # } #
+            </ul>
+        </li>
+        # } else {#
+        <li onclick="menuClick('#:text #','#:contentUrl #');">
+            <a><i class="#:cssClass #"></i> #:text #</a>
+        </li>
+        # } #
+    </script>
+    <script>
+        "use strict";
+        var currentTabs = [];
+
+        $(document).ready(function () {
+            displayUserName();
+
+            var template = kendo.template($("#template").html());
+            var menusJSON_apiUrl = "api/Menus/Json/Authorized";
+            var dataSource = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        url: menusJSON_apiUrl,
+                        dataType: "json",
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader('Authorization', 'Basic ' + Cookies.get('token'));
+                        }
+                    }
+                },
+                change: function () {
+                    $("#side-menu").html(kendo.render(template, this.view()));
+                    $("#side-menu").metisMenu();
+                }
+            });
+            dataSource.read();
+        });
+
+        function displayUserName() {
+            var username = Cookies.get('token');
+            $("#userNameLabel").html(username);
+            
+            if (username.toLowerCase() === "admin") 
+                $(".adminMenu").show();
+            else 
+                $(".adminMenu").hide();
+
+        }
+
+        function closeTab(closeBtn) {
+            //var tabCaption = $(closeBtn).closest("li").text();
+
+            //移除
+            var selectIndex = $(closeBtn).closest("li").index();
+            currentTabs.splice(selectIndex, 1);
+            var kTabStrip = $("#tabstrip").data("kendoTabStrip");
+            kTabStrip.remove(selectIndex);
+
+            //選取
+            if (kTabStrip.select().index() == -1) {
+                var otherTabIndex = selectIndex + 1;
+                otherTabIndex = otherTabIndex >= currentTabs.length ? currentTabs.length - 1 : otherTabIndex;
+                kTabStrip.select(otherTabIndex);
+            }
+
+        }
+
+        function menuClick(menuCaption, menuUrl) {
+            //取得或建立kendoTabStrip
+            var kTabStrip = $("#tabstrip").data("kendoTabStrip");
+            if (kTabStrip == undefined) {
+                $("#tabstrip").kendoTabStrip();
+                kTabStrip = $("#tabstrip").data("kendoTabStrip");
+                //kTabStrip.tabGroup.on('click', 'li', function (e) {
+                //    kTabStrip.reload($(this));
+                //});
+            }
+
+            //判斷是否需要新增頁籤
+            var indexOfTab = getObjectIndexOfArray("caption", menuCaption, currentTabs);
+            if (indexOfTab == -1) {
+                currentTabs.push({ "contentUrl": menuUrl, "caption": menuCaption });
+                var indexOfTab = currentTabs.length - 1;
+
+                kTabStrip.append({
+                    text: menuCaption + " <span  onclick='closeTab(this);'><i class=\"fa fa-times\"></i></span>",
+                    encoded: false,
+                    contentUrl: menuUrl
+                });
+
+            }
+            //$("#tabstrip").data("kendoTabStrip").setDataSource(currentTabs); //清除其它tab的內容(可避免id衝突)
+
+
+            //選取新增或既有的頁籤
+            kTabStrip.select(indexOfTab);
+        }
+
+        function clearToken() {
+            Cookies.remove("token");
+            Cookies.remove("userName");
+        }
+
+        function prepareChangePassword() {
+            var userName = Cookies.get('userName');
+            showChangePasswordWindow(userName);
+        }
+    </script>
+
+</body>
+</html>

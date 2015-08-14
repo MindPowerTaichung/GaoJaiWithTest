@@ -1,0 +1,144 @@
+﻿// 取代
+// [Controller名稱] : (如:Roles)
+// [DatabaseModelContainer名稱] : 資料庫ModelContainer類別名稱(如:MembershipModelContainer)
+// [EntityViewModel名稱] : 資料物件ViewModel類別名稱(如:RoleViewModel)
+// [資料集名稱] : (如:Roles)
+// [資料類別名稱] : (如:Role)
+// [資料識別欄位] : (如:Id)
+// [資料識別欄位型別] : (如:int)
+// [資料ViewModel類別欄位1] :  (如:Name)
+
+using System;
+using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+
+namespace MPERP2015.Controllers
+{
+    public class [Controller名稱]Controller : ApiController
+    {
+        [DatabaseModelContainer名稱] db = new [DatabaseModelContainer名稱]();
+
+        // GET: api/[Controller名稱]
+        public IEnumerable<[EntityViewModel名稱]> Get()
+        {
+            var items = db.[資料集名稱].ToArray<[資料類別名稱]>().Select(item => To[EntityViewModel名稱](item));
+            return items;
+        }
+
+        // GET: api/[Controller名稱]/5
+        public IHttpActionResult Get([資料識別欄位型別] id)
+        {
+            [資料類別名稱] item = db.[資料集名稱].Find(id);
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(To[EntityViewModel名稱](item));
+        }
+
+        // POST: api/[Controller名稱]
+        [HttpPost]
+        public IHttpActionResult Post([EntityViewModel名稱] item_viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            [資料類別名稱] item = new [資料類別名稱] { [資料識別欄位] = item_viewModel.[資料識別欄位], 
+                                                 [資料ViewModel類別欄位1] = item_viewModel.[資料ViewModel類別欄位1], 
+                                                 [資料ViewModel類別欄位2] = item_viewModel.[資料ViewModel類別欄位2]};
+												 //不需指定Timestamp欄位
+
+            db.[資料集名稱].Add(item);
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                var entityError = ex.EntityValidationErrors.SelectMany(x => x.ValidationErrors).Select(x => x.ErrorMessage);
+                var getFullMessage = string.Join("; ", entityError);
+                var exceptionMessage = string.Concat(ex.Message, "errors are: ", getFullMessage);
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, exceptionMessage));
+            }
+
+            return CreatedAtRoute("DefaultApi", new { id = item.[資料識別欄位] }, To[EntityViewModel名稱](item));
+        }
+
+        // PUT: api/[Controller名稱]/5
+        [HttpPut]
+        public IHttpActionResult Put([資料識別欄位型別] id, [EntityViewModel名稱] item_viewModel)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (id != item_viewModel.[資料識別欄位])
+                return BadRequest();
+
+            //把資料庫中的那筆資料讀出來
+            var item_db = db.[資料集名稱].Find(id);
+            if (item_db == null)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "這筆資料已被刪除!"));
+            }
+            else
+            {
+                try
+                {
+				    //不需指定[資料識別欄位]
+                    item_db.[資料ViewModel類別欄位1] = item_viewModel.[資料ViewModel類別欄位1];
+					item_db.[資料ViewModel類別欄位2] = item_viewModel.[資料ViewModel類別欄位2];
+					//Timestamp欄位以如下方式設定
+                    db.Entry(item_db).OriginalValues["Timestamp"] = Convert.FromBase64String(item_viewModel.TimestampString);
+                    db.SaveChanges();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (db.[資料集名稱].Find(id) == null)
+                        throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound, "這筆資料已被刪除!"));
+                    else
+                        throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Conflict, "這筆資料已被其他人修改!"));
+                }
+            }
+
+            return Ok(To[EntityViewModel名稱](item_db));
+
+        }
+
+        // DELETE: api/[Controller名稱]/5
+        [HttpDelete]
+        public IHttpActionResult Delete([資料識別欄位型別] id)
+        {
+            [資料類別名稱] item_db = db.[資料集名稱].Find(id);
+            if (item_db == null)
+            {
+                return NotFound();
+            }
+
+            db.[資料集名稱].Remove(item_db);
+            db.SaveChanges();
+
+            return Ok(new [EntityViewModel名稱] { [資料識別欄位] = id });
+        }
+
+        private [EntityViewModel名稱] To[EntityViewModel名稱]([資料類別名稱] item)
+        {
+            return new [EntityViewModel名稱] { [資料識別欄位] = item.[資料識別欄位], Name = item.Name, TimestampString = Convert.ToBase64String(item.Timestamp) };
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+    }
+}

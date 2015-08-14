@@ -1,0 +1,3 @@
+﻿View_變數名稱或元素識別名稱請在前加上View的檔案
+因為workspace.html中使用Kendo TabStrip動態載入每個View的檔案內容
+若變數名稱或元素識別名稱重複則會造成無法區別

@@ -1,0 +1,160 @@
+﻿<script id="order-template" type="text/x-kendo-template">
+    <h1 class="page-header">訂單編號: #:id #</h1>
+    <div>
+        <label for="customer_Id">客戶</label>:
+        <input id="txtCustomer_Id" name="customer_Id" value="#: customer_Id #" />
+    </div>
+    <div>
+        <label for="orderDate">下單日期</label>:
+        <input type="text"
+               id="txtOrderDate"
+               name="orderDate"
+               value="#: orderDate #" />
+    </div>
+</script>
+<div id="divOrder"></div>
+<div id="gridOrderDetails"></div>
+<input type="button" value="儲存" id="btnSave" />
+
+<script>
+
+    function fatchOrderById() {
+
+        var data = this.data();
+        var order_template = kendo.template($("#order-template").html());
+        $("#divOrder").html(order_template(dsOrderById.data()[0]));
+
+        var orderDetails = dsOrderById.data()[0].orderDetails;
+
+        var dsProducts = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "api/products",
+                    dataType: "json"
+                }
+            },
+            schema: {
+                parse: function (response) {
+                    var products = [];
+                    for (var i = 0; i < response.length; i++) {
+                        var product = {
+                            value: response[i].id,
+                            text: response[i].name
+                        };
+                        products.push(product);
+                    }
+                    return products;
+                }
+            }
+        });
+        dsProducts.read();
+
+        $("#gridOrderDetails").kendoGrid({
+            dataSource: orderDetails,
+            toolbar: ["create"],
+            columns: [
+                            {
+                                field: "product_Id", title: "產品",
+                                values: dsProducts.data(),
+                                template: function (dataItem) {
+                                    return dataItem.productName;
+                                },
+                                editor: function (container, options) {
+                                    var input = $("<input />");
+                                    // 這個輸入元素的name一定要設為此欄位的名稱
+                                    input.attr("name", options.field); //即product_Id
+                                    input.appendTo(container);
+                                    // initialize a Kendo UI AutoComplete
+                                    input.kendoDropDownList({
+                                        dataTextField: "text",
+                                        dataValueField: "value",
+                                        dataSource: dsProducts.data(),
+                                        change: function () {
+                                            var orderDetails = dsOrderById.data()[0].orderDetails;
+                                            for (var i = 0; i < orderDetails.length; i++) {
+                                                if (orderDetails[i].product_Id == this.dataItem().value) {
+                                                    orderDetails[i].productName = this.dataItem().text;
+                                                }
+                                            }
+                                        }
+                                    });
+                                }
+                            },
+                            { field: "quantity", title: "數量" },
+            ],
+            editable: true
+        });
+    }
+
+    var order_id = global_Order_Id; // getQueryStringByName("order_id");
+    console.log("oid:" + global_Order_Id);
+
+    if (order_id == "") {
+        alert("請指定order_id!");
+    } else {
+
+        var apiUrl_Orders = "api/orders";
+        var dsOrderById = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: apiUrl_Orders + "/" + order_id,
+                    dataType: "json"
+                },
+                update: {
+                    url: apiUrl_Orders + "/" + order_id,
+                    type: "put",
+                    contentType: "application/json",
+                    dataType: "json"
+                },
+                destroy: {
+                    url: apiUrl_Orders + "/" + order_id,
+                    type: "delete",
+                    dataType: "json"
+                },
+                create: {
+                    url: apiUrl_Orders,
+                    type: "post",
+                    contentType: "application/json",
+                    dataType: "json"
+                },
+                parameterMap: function (data, operation) {
+                    if (operation == "create") {
+                        data.id = 0;
+                    }
+                    if (operation != "read") {
+                        return JSON.stringify(data.models[0]);
+                    }
+
+                }
+            },
+            error: function (err) {
+                var message = (err.xhr.responseText == "") ? "" : JSON.parse(err.xhr.responseText).message + "\n";
+                alert(err.status + "\n" + message + "將重新載入資料!");
+                dsOrderById.fetch(fatchOrderById);
+            },
+            batch: true,
+            schema: {
+                model: {
+                    id: "id",
+                    fields: {
+                        id: { editable: false, nullable: false },
+                        customer_Id: { validation: { required: true } },
+                        timestampString: { editable: false }
+                    }
+                }
+            }
+        });
+
+        dsOrderById.fetch(fatchOrderById);
+
+        $("#btnSave").click(function () {
+            var order = dsOrderById.at(0);
+            order.set("customer_Id", $("#txtCustomer_Id").val());
+            order.set("orderDate", $("#txtOrderDate").val());
+            var orderDetails = dsOrderById.at(0).orderDetails;
+            dsOrderById.sync();
+            $("#gridOrderDetails").data("kendoGrid").refresh();
+        });
+    }
+
+</script>
