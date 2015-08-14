@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<OrderedTest name="OrderedTestRole" storage="c:\users\administrator\documents\github\gaojaiwithtest\gaojaiunittest\orderedtestrole.orderedtest" id="3af98cbf-f52f-43ed-9e71-26e0b94841d7" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestLinks>
+    <TestLink id="fe4335a3-869b-4304-a76d-0322e962d0e4" name="GetAllRoles_ShouldReturnRoleViewModel" storage="bin\debug\gaojaiunittest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <TestLink id="45135fd8-5e80-18ce-e804-fb91c0ff294a" name="GetRolesById1_ShouldReturnRoleAdmin" storage="bin\debug\gaojaiunittest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <TestLink id="910bc1e4-003b-6ffc-68eb-94510c2928a1" name="PostRole_ShouldAddARole" storage="bin\debug\gaojaiunittest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <TestLink id="04b4db07-da33-57ea-42c2-c79e53efdef3" name="UpdateRole_ShouldUpdateRoleName" storage="bin\debug\gaojaiunittest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <TestLink id="4d24cde9-821c-27bc-46c2-bc117818d810" name="DeleteRole_ShouldDeleteARole" storage="bin\debug\gaojaiunittest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  </TestLinks>
+</OrderedTest>

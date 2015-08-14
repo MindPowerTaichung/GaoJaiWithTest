@@ -16,10 +16,22 @@ namespace MPERP2015.MP.Log
 
     public class MPAccessLog
     {
-        static string logPath = HttpContext.Current.Server.MapPath(string.Format("~/App_Data/AccessLog{0:yyyyMM}.txt", DateTime.Now));
-        public static void SetLogPath(string path)
-        {
-            logPath = path;
+        static string getLogPath() {
+            string logDir;
+            if (HttpContext.Current != null)
+            {
+                logDir = HttpContext.Current.Server.MapPath("~/App_Data");
+            }
+            else
+            {
+                logDir = Environment.CurrentDirectory +"\\Log" ;
+            }
+
+            //確認或建立App_Data目錄
+            if (!Directory.Exists(logDir))
+                Directory.CreateDirectory(logDir);
+
+            return Path.Combine(logDir,string.Format("AccessLog{0:yyyyMM}.txt", DateTime.Now));
         }
 
         public static void WriteEntry(string userName, AccessAction action, string entityName, string data) {
@@ -30,12 +42,8 @@ namespace MPERP2015.MP.Log
                 entityName,
                 data);            
 
-            //確認或建立App_Data目錄
-            if (!Directory.Exists(Path.GetDirectoryName(logPath)))
-                Directory.CreateDirectory(Path.GetDirectoryName(logPath));
-
             //寫入Log
-            File.AppendAllText(logPath, msg);
+            File.AppendAllText(getLogPath(), msg);
         }
     }
 }

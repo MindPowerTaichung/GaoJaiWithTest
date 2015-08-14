@@ -139,7 +139,6 @@ namespace MPERP2015.Controllers
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, exceptionMessage));
             }
 
-
             return Ok(new RoleViewModel { Id = id });
         }
 

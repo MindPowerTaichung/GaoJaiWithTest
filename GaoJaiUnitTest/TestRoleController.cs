@@ -12,12 +12,18 @@ using System.Web.Hosting;
 using MPERP2015.MP.Log;
 using System.Web.Routing;
 using System.Web.Http.Controllers;
+using System.Web.Http;
+using System.Net.Http;
+using System.Web.Http.Routing;
+using System.Web.Http.Hosting;
+using System.Linq;
 
 namespace GaoJaiUnitTest
 {
     [TestClass]
     public class TestMembershipController
     {
+
         [TestMethod]
         public void GetAllRoles_ShouldReturnRoleViewModel()
         {
@@ -38,6 +44,7 @@ namespace GaoJaiUnitTest
             var result = controller.GetRoles(1) as OkNegotiatedContentResult<RoleViewModel>;
             // assert
             Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Content);
             Assert.AreEqual("管理者", result.Content.Name);
         }
 
@@ -45,22 +52,54 @@ namespace GaoJaiUnitTest
         public void PostRole_ShouldAddARole()
         {
             // arrange
-            MPAccessLog.SetLogPath(string.Format("{1}\\App_Data\\AccessLog{0:yyyyMM}.txt", DateTime.Now, @"C:\Users\鄭淑芬\Source\Repos\GaoJaiWithTest\GaoJai"));
-            SimpleWorkerRequest request = new SimpleWorkerRequest("", "", "", null, new StringWriter());
-            HttpContext.Current = new HttpContext(request); 
-            HttpContext.Current.User = new GenericPrincipal(
-                new GenericIdentity("admin"),
-                new string[0]
-                );
             var controller = new MembershipController();
             RoleViewModel roleTest = new RoleViewModel { Name = "測試角色" };
+
             // act
-            var result = controller.PostRole(roleTest);
+            var result = controller.PostRole(roleTest) as CreatedAtRouteNegotiatedContentResult<RoleViewModel>;
+            
             // assert
-            //Assert.AreEqual(HttpStatusCode.Created, (result as StatusCodeResult).StatusCode);
-            //Assert.IsTrue((result as OkNegotiatedContentResult<RoleViewModel>).Content.Id>0);
-            //Assert.AreEqual(roleTest.Name,(result as OkNegotiatedContentResult<RoleViewModel>).Content.Name);
             Assert.IsNotNull(result);
+            Assert.AreEqual("GetRoleById", result.RouteName);
+            Assert.IsTrue(Convert.ToInt32(result.RouteValues["id"]) > 0);
+            Assert.AreEqual(roleTest.Name, result.Content.Name);
+            
+        }
+
+        [TestMethod]
+        public void UpdateRole_ShouldUpdateRoleName()
+        {
+            // arrange
+            var controller = new MembershipController();
+            var role = controller.GetRoles().Where(r => r.Name == "測試角色").Select(r=>r).First();
+            RoleViewModel roleTest = new RoleViewModel { Id = role.Id, Name = "測試角色AAA", TimestampString=role.TimestampString };
+
+            // act
+            var result = controller.PutRole(roleTest.Id, roleTest) as OkNegotiatedContentResult<RoleViewModel>;
+
+            // assert
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Content);
+            Assert.IsTrue(result.Content.Id ==roleTest.Id);
+            Assert.IsTrue(result.Content.Name == roleTest.Name);
+            
+        }
+
+        [TestMethod]
+        public void DeleteRole_ShouldDeleteARole()
+        {
+            // arrange
+            var controller = new MembershipController();
+            var roleIdToDelete = controller.GetRoles().Where(r => r.Name == "測試角色AAA").Select(r => r.Id).First();
+
+            // act
+            var result = controller.DeleteRole(roleIdToDelete) as OkNegotiatedContentResult<RoleViewModel>;
+
+            // assert
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Content);
+            Assert.IsTrue(result.Content.Id > 0);
+
         }
     }
 }
