@@ -17,12 +17,26 @@ using System.Net.Http;
 using System.Web.Http.Routing;
 using System.Web.Http.Hosting;
 using System.Linq;
+using System.Threading;
+using System.Diagnostics;
 
 namespace GaoJaiUnitTest
 {
     [TestClass]
     public class TestMembershipController
     {
+        //[ClassInitialize]沒有作用?
+        //public static void ClassInit(TestContext context)
+        //{
+        //    Debug.WriteLine("ClassInit");
+        //    Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity("單元測試a"), new[] { "tester" });
+        //}
+        [TestInitialize()]
+        public void Initialize()
+        {
+            Debug.WriteLine("TestMethodInit");
+            Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity("單元測試b"), new[] { "tester" });
+        }
 
         [TestMethod]
         public void GetAllRoles_ShouldReturnRoleViewModel()
@@ -52,7 +66,7 @@ namespace GaoJaiUnitTest
         public void PostRole_ShouldAddARole()
         {
             // arrange
-            var controller = new MembershipController();
+            var controller = new MembershipController();            
             RoleViewModel roleTest = new RoleViewModel { Name = "測試角色" };
 
             // act
